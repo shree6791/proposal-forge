@@ -2,7 +2,8 @@ import React from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import "aos/dist/aos.css";
-import { ClientLayout } from "@/components/layouts/client-layout";
+import { Header } from "@/components/layouts/header";
+import { Footer } from "@/components/layouts/footer";
 import { SupabaseProvider } from "@/components/providers/supabase-provider";
 
 const geistSans = localFont({
@@ -25,11 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
         <SupabaseProvider>
-          <ClientLayout>{children}</ClientLayout>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
         </SupabaseProvider>
       </body>
     </html>
