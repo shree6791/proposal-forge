@@ -61,7 +61,10 @@ export default function AuthPage() {
         >
           <CredentialsForm
             isSignUp={isSignUp}
-            onSubmit={handleAuth}
+            handleSubmit={async (email: string, password: string) => {
+              const result = await handleAuth(email, password);
+              return result || { success: false, message: 'Authentication failed' };
+            }}
             onToggleMode={() => setIsSignUp(!isSignUp)}
           />
         </motion.div>

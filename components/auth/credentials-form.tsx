@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthFormField } from './auth-form-field';
@@ -9,6 +8,7 @@ import { useAuth } from '@/hooks/use-auth';
 
 interface CredentialsFormProps {
   isSignUp: boolean;
+  handleSubmit: (email: string, password: string) => Promise<{ success: boolean; message?: string; }>;
   onToggleMode: () => void;
 }
 
