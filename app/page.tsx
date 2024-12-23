@@ -1,7 +1,6 @@
 "use client";
 
 import { HeroSection } from '@/components/ui/hero-section';
-import { NavBar } from '@/components/navigation/nav-bar';
 import { StatsSection } from '@/components/ui/sections/stats-section';
 import { FeaturesSection } from '@/components/ui/sections/features-section';
 import { TestimonialsSection } from '@/components/ui/sections/testimonials-section';
