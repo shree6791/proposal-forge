@@ -2,8 +2,8 @@ import React from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import "aos/dist/aos.css";
-import SupabaseProvider from "@/components/providers/supabase-provider";
 import { ClientLayout } from "@/components/layouts/client-layout";
+import { SupabaseProvider } from "@/components/providers/supabase-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
