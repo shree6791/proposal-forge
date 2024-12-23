@@ -3,11 +3,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createClientComponentClient, type User } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
+import { Database } from './types';
 
 type SupabaseContextType = {
   user: User | null;
   isLoading: boolean;
-  supabase: ReturnType<typeof createClientComponentClient>;
+  supabase: ReturnType<typeof createClientComponentClient<Database>>;
+
 };
 
 const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined);
@@ -15,7 +17,7 @@ const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined
 export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<any>();
   const router = useRouter();
 
   useEffect(() => {
