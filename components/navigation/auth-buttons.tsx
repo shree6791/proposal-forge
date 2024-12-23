@@ -1,10 +1,14 @@
+"use client";
+
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useSupabase } from '@/components/providers/supabase-provider';
 import { useAuth } from '@/hooks/use-auth';
 
 export function AuthButtons() {
   const router = useRouter();
-  const { user, signOut, isLoading } = useAuth();
+  const { user, isLoading } = useSupabase();
+  const { signOut } = useAuth();
 
   if (isLoading) {
     return null;
@@ -13,26 +17,25 @@ export function AuthButtons() {
   if (!user) {
     return (
       <Button 
-        variant="default"
         onClick={() => router.push('/credentials')}
-        className="bg-primary-600 hover:bg-primary-700 text-white"
+        className="bg-blue-600 hover:bg-blue-700 text-white"
       >
-        Login
+        Sign In
       </Button>
     );
   }
 
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm text-neutral-600">
+      <span className="text-sm text-gray-600">
         {user.email}
       </span>
       <Button 
         variant="outline"
         onClick={signOut}
-        className="border-primary-200 text-primary-600 hover:bg-primary-50"
+        className="border-blue-200 text-blue-600 hover:bg-blue-50"
       >
-        Logout
+        Sign Out
       </Button>
     </div>
   );

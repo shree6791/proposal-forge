@@ -1,63 +1,130 @@
 "use client";
 
-import { NavBar } from '@/components/navigation/nav-bar';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FAQSearch } from '@/components/ui/faq/faq-search';
+import { FAQCategories } from '@/components/ui/faq/faq-categories';
+import { FAQItem } from '@/components/ui/faq/faq-item';
+import { PopularQuestions } from '@/components/ui/faq/popular-questions';
+import { FAQCTA } from '@/components/ui/faq/faq-cta';
+import { faqData } from '@/lib/data/faq-data';
+import { useDebounce } from '@/lib/hooks/use-debounce';
 
 export default function FAQs() {
-  const faqs = [
-    {
-      question: "What is ProposalForge?",
-      answer: "ProposalForge is an advanced RFP response platform designed to streamline the proposal creation process for IT services organizations. It offers innovative features like a powerful Knowledge Repository, intuitive chat interfaces, strategic proposal management with Flight Plan, and AI-powered Reflective Response Engine. ProposalForge helps reduce turnaround time and improve proposal quality while ensuring compliance and accuracy. Version 1 specializes in Application Support proposals, with future updates expanding to Application Development, Service Desk, Cloud, and other IT services."
-    },
-    {
-      question: "How can I get started with ProposalForge?",
-      answer: "Getting started is easy! Contact us through our contact form, and our team will guide you through implementing ProposalForge for your organization. We provide full onboarding support to ensure smooth adoption, including training and integration with your existing systems."
-    },
-    {
-      question: "Can ProposalForge integrate with our existing systems?",
-      answer: "Yes! ProposalForge offers seamless integration with tools like SharePoint, Excel, Word, and over 400 content libraries. This ensures your organization can enhance collaboration and maximize workflow efficiency without disrupting current processes."
-    },
-    {
-      question: "What makes ProposalForge different from other proposal tools?",
-      answer: "ProposalForge is tailored for IT services proposals and leverages advanced AI to create ProposalForge-compliant drafts of 40-60 pages in minutes. It automatically integrates win themes, maintains consistent voice and style, and reduces editing time. Features like semantic search, automatic indexing, compliance checks, and push-button reports set it apart as a comprehensive solution."
-    },
-    {
-      question: "How does ProposalForge ensure proposal accuracy?",
-      answer: "ProposalForge includes advanced compliance checking tools, such as hallucination, citation, and completeness reports. These features ensure accuracy, traceability, and alignment with all RFP requirements, giving users confidence in their submissions."
-    },
-    {
-      question: "How long does it take to generate a proposal using ProposalForge?",
-      answer: "ProposalForge can generate complete, review-ready proposal drafts in record time, significantly faster than traditional methods. Its AI-powered engine produces comprehensive 40-60 page drafts in minutes, saving days in the proposal development process."
-    },
-    {
-      question: "What types of proposals does ProposalForge currently support?",
-      answer: "Version 1 focuses on Application Support proposals. Upcoming versions will expand to include Application Development, Service Desk, Cloud Services, and other IT service areas, enabling comprehensive support for diverse business needs."
-    },
-    {
-      question: "How does ProposalForge help in strategy development?",
-      answer: "ProposalForge's Flight Plan feature empowers teams to define strategic approaches and win themes while guiding the proposal development process. By automating content creation and solutioning frameworks, ProposalForge allows teams to focus on refining strategies to win more business."
-    },
-    {
-      question: "Is training required to use ProposalForge?",
-      answer: "ProposalForge is designed for intuitive use, minimizing the need for extensive training. The platform's user-friendly interface enables quick integration and adoption, allowing teams to realize value immediately."
-    },
-    {
-      question: "How secure is our proposal data in ProposalForge?",
-      answer: "ProposalForge prioritizes data security with strict encryption protocols and adherence to industry best practices. Your sensitive proposal data is safeguarded to ensure privacy and compliance with security standards."
-    }
-  ];
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(faqData.categories[0].name);
+  const [openQuestions, setOpenQuestions] = useState<Record<string, boolean>>({});
+  const [isSearching, setIsSearching] = useState(false);
+  const [filteredQuestions, setFilteredQuestions] = useState(faqData.categories[0].questions);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  useEffect(() => {
+    setIsSearching(true);
+    
+    const searchResults = debouncedSearchQuery
+      ? faqData.categories
+          .flatMap(category => 
+            category.questions.filter(q => 
+              q.question.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+              q.answer.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+            )
+          )
+      : faqData.categories
+          .find(category => category.name === selectedCategory)
+          ?.questions || [];
+
+    setFilteredQuestions(searchResults);
+    setIsSearching(false);
+  }, [debouncedSearchQuery, selectedCategory]);
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSearchQuery('');
+  };
+
+  const toggleQuestion = (questionId: string) => {
+    setOpenQuestions(prev => ({
+      ...prev,
+      [questionId]: !prev[questionId]
+    }));
+  };
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      <NavBar />
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-black">Frequently Asked Questions</h1>
-        <div className="space-y-6">
-          {faqs.map((faq, index) => (
-            <div key={index} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-bold mb-2 text-black">{faq.question}</h2>
-              <p className="text-gray-600">{faq.answer}</p>
-            </div>
-          ))}
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            Frequently Asked{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+              Questions
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600">
+            Find answers to common questions about ProposalForge and learn how we can help streamline your proposal creation process.
+          </p>
+        </motion.div>
+
+        <div className="mb-16">
+          <FAQSearch 
+            value={searchQuery}
+            onChange={setSearchQuery}
+            isLoading={isSearching}
+          />
+        </div>
+
+        <div className="mb-16">
+          <PopularQuestions 
+            questions={faqData.popularQuestions}
+            onQuestionClick={handleCategorySelect}
+          />
+        </div>
+
+        <div className="mb-12">
+          <FAQCategories 
+            categories={faqData.categories.map(cat => ({
+              name: cat.name,
+              count: cat.questions.length
+            }))}
+            selectedCategory={selectedCategory}
+            onSelect={handleCategorySelect}
+          />
+        </div>
+
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="max-w-3xl mx-auto mb-20"
+        >
+          {filteredQuestions.length > 0 ? (
+            filteredQuestions.map((faq, index) => (
+              <FAQItem
+                key={`${selectedCategory}-${index}`}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openQuestions[`${selectedCategory}-${index}`]}
+                onToggle={() => toggleQuestion(`${selectedCategory}-${index}`)}
+                index={index}
+              />
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12"
+            >
+              <p className="text-gray-600">No questions found matching your search.</p>
+            </motion.div>
+          )}
+        </motion.div>
+
+        <div className="max-w-4xl mx-auto">
+          <FAQCTA />
         </div>
       </div>
     </div>

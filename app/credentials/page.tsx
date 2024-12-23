@@ -1,26 +1,19 @@
 "use client";
 
 import { useState } from 'react';
-import { NavBar } from '@/components/navigation/nav-bar';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useSupabase } from '@/components/providers/supabase-provider';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useSupabase } from '@/components/providers/supabase-provider';
+import { CredentialsForm } from '@/components/auth/credentials-form';
+import { AuthSocialProof } from '@/components/auth/social-proof';
+import { AuthBackground } from '@/components/auth/background';
 
 export default function AuthPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const { supabase } = useSupabase();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessage('');
-    setLoading(true);
-
+  const handleAuth = async (email: string, password: string) => {
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
@@ -32,8 +25,7 @@ export default function AuthPage() {
         });
         
         if (error) throw error;
-        setMessage('Success! You can now sign in with your credentials.');
-        setIsSignUp(false);
+        return { success: true, message: 'Success! You can now sign in with your credentials.' };
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
@@ -42,91 +34,47 @@ export default function AuthPage() {
         
         if (error) throw error;
         
-        // If sign in is successful and we have a session
         if (data.session) {
-          console.log('Sign in successful, redirecting...');
           router.push('/inputproposal');
           router.refresh();
+          return { success: true };
         }
       }
     } catch (error: any) {
-      console.error('Auth error:', error);
-      setMessage(error.message || 'An error occurred');
-    } finally {
-      setLoading(false);
+      return { 
+        success: false, 
+        message: error.message || 'An error occurred during authentication'
+      };
     }
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      <NavBar />
-      <div className="flex items-center justify-center min-h-[calc(100vh-6rem)] bg-gray-50">
-        <Card className="w-full max-w-md p-8 bg-white shadow-lg">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            {isSignUp ? 'Create an Account' : 'Sign In'}
-          </h2>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-                minLength={6}
-              />
-            </div>
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+      <AuthBackground />
+      
+      <div className="max-w-6xl w-full flex flex-col md:flex-row gap-12 items-center relative">
+        {/* Left Side - Form */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="w-full md:w-1/2 bg-white p-8 rounded-2xl shadow-xl"
+        >
+          <CredentialsForm
+            isSignUp={isSignUp}
+            onSubmit={handleAuth}
+            onToggleMode={() => setIsSignUp(!isSignUp)}
+          />
+        </motion.div>
 
-            {message && (
-              <div className={`p-3 rounded-md ${
-                message.includes('Success') 
-                  ? 'bg-green-100 text-green-700' 
-                  : 'bg-red-100 text-red-700'
-              }`}>
-                {message}
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
-            </Button>
-          </form>
-
-          <div className="mt-4 text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-blue-600 hover:text-blue-800 text-sm"
-            >
-              {isSignUp 
-                ? 'Already have an account? Sign in' 
-                : 'Need an account? Sign up'}
-            </button>
-          </div>
-        </Card>
+        {/* Right Side - Social Proof */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="w-full md:w-1/2"
+        >
+          <AuthSocialProof />
+        </motion.div>
       </div>
     </div>
   );
