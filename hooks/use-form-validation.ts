@@ -1,64 +1,37 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
-interface ValidationRule {
-  validate: (value: any) => boolean;
-  message: string;
+interface TicketData {
+  incidentTickets: number;
+  serviceRequests: number;
+  changeTickets: number;
 }
 
-interface FieldValidation {
-  [key: string]: ValidationRule[];
-}
+export function useFormValidation() {
+  const isTicketDataValid = useCallback((ticketData: TicketData) => {
+    const hasValidTickets = 
+      Number(ticketData.incidentTickets) > 0 ||
+      Number(ticketData.serviceRequests) > 0 ||
+      Number(ticketData.changeTickets) > 0;
 
-export function useFormValidation(validationRules: FieldValidation) {
-  const [errors, setErrors] = useState<Record<string, string>>({});
+    return hasValidTickets;
+  }, []);
 
-  const validateField = useCallback((fieldName: string, value: any) => {
-    const fieldRules = validationRules[fieldName];
-    if (!fieldRules) return true;
-
-    for (const rule of fieldRules) {
-      if (!rule.validate(value)) {
-        setErrors(prev => ({
-          ...prev,
-          [fieldName]: rule.message
-        }));
-        return false;
-      }
-    }
-
-    setErrors(prev => {
-      const newErrors = { ...prev };
-      delete newErrors[fieldName];
-      return newErrors;
-    });
-    return true;
-  }, [validationRules]);
-
-  const validateForm = useCallback((formData: Record<string, any>) => {
-    let isValid = true;
-    const newErrors: Record<string, string> = {};
-
-    Object.keys(validationRules).forEach(fieldName => {
-      const value = formData[fieldName];
-      const fieldRules = validationRules[fieldName];
-
-      for (const rule of fieldRules) {
-        if (!rule.validate(value)) {
-          newErrors[fieldName] = rule.message;
-          isValid = false;
-          break;
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return isValid;
-  }, [validationRules]);
+  const isFormComplete = useCallback((formData: any) => {
+    return !!(
+      formData.selectedTopic &&
+      formData.companyName?.trim() &&
+      formData.clientName?.trim() &&
+      formData.clientObjectives?.length > 0 &&
+      isTicketDataValid({
+        incidentTickets: formData.incidentTickets,
+        serviceRequests: formData.serviceRequests,
+        changeTickets: formData.changeTickets
+      })
+    );
+  }, [isTicketDataValid]);
 
   return {
-    errors,
-    validateField,
-    validateForm,
-    hasErrors: Object.keys(errors).length > 0
+    isFormComplete,
+    isTicketDataValid
   };
 }

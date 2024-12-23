@@ -2,43 +2,25 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/providers/supabase-provider';
 
-const DEMO_EMAIL = 'demo@example.com';
-const DEMO_PASSWORD = 'demo123456';
-
 export function useAuth(requireAuth = false) {
-  const { user, isLoading, supabase } = useSupabase();
   const router = useRouter();
+  const { supabase, user, isLoading } = useSupabase();
 
   useEffect(() => {
-    const autoSignIn = async () => {
-      if (!isLoading && !user) {
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: DEMO_EMAIL,
-            password: DEMO_PASSWORD,
-          });
-          
-          if (error) {
-            // If sign in fails, create a new account
-            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-              email: DEMO_EMAIL,
-              password: DEMO_PASSWORD,
-            });
-            
-            if (signUpError) {
-              console.error('Auto sign-up failed:', signUpError);
-            }
-          }
-        } catch (error) {
-          console.error('Auto authentication failed:', error);
-        }
-      }
-    };
-
-    if (requireAuth) {
-      autoSignIn();
+    if (requireAuth && !isLoading && !user) {
+      router.push('/credentials');
     }
-  }, [isLoading, requireAuth, user, supabase.auth]);
+  }, [requireAuth, router, user, isLoading]);
+
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) throw error;
+    return data;
+  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -47,7 +29,8 @@ export function useAuth(requireAuth = false) {
 
   return {
     user,
+    signIn,
     signOut,
-    isLoading,
+    isLoading
   };
 }

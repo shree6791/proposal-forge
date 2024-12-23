@@ -1,7 +1,6 @@
 "use client";
 
-// import { useProposal } from '@/hooks/use-proposal';
-import { useProposal } from '../../hooks/use-proposal';
+import { useProposal } from '@/hooks/use-proposal';
 import { ResultHeader } from '@/components/proposal/result/result-header';
 import { ProposalContent } from '@/components/proposal/result/proposal-content';
 import { DownloadSection } from '@/components/proposal/result/download-section';
