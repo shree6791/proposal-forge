@@ -5,7 +5,6 @@ import { StatsSection } from '@/components/ui/sections/stats-section';
 import { FeaturesSection } from '@/components/ui/sections/features-section';
 import { TestimonialsSection } from '@/components/ui/sections/testimonials-section';
 import { CTASection } from '@/components/ui/sections/cta-section';
-import { Footer } from '@/components/ui/footer';
 
 export default function Home() {
   return (
@@ -20,7 +19,6 @@ export default function Home() {
       <FeaturesSection />
       <TestimonialsSection />
       <CTASection />
-      <Footer />
     </div>
   );
 }
