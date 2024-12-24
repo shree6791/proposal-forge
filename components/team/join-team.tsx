@@ -56,7 +56,7 @@ export function JoinTeam() {
                 whileTap={{ scale: 0.95 }}
                 className="group px-8 py-4 bg-white text-blue-600 rounded-xl font-medium hover:bg-blue-50 transition-colors shadow-lg inline-flex items-center gap-2"
               >
-                View Open Positions
+                Contact Us
                 <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
               </motion.button>
             </Link>
