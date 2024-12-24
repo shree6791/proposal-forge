@@ -1,27 +1,29 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 import { useSupabase } from '@/components/providers/supabase-provider';
-import { useAuth } from '@/hooks/use-auth';
+import { LogOut } from 'lucide-react';
 
 export function AuthButtons() {
   const router = useRouter();
-  const { user, isLoading } = useSupabase();
-  const { signOut } = useAuth();
+  const { user, supabase } = useSupabase();
 
-  if (isLoading) {
-    return null;
-  }
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
 
   if (!user) {
     return (
-      <Button 
-        onClick={() => router.push('/credentials')}
-        className="bg-blue-600 hover:bg-blue-700 text-white"
+      <motion.a
+        href="/credentials"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-shadow"
       >
         Sign In
-      </Button>
+      </motion.a>
     );
   }
 
@@ -30,13 +32,15 @@ export function AuthButtons() {
       <span className="text-sm text-gray-600">
         {user.email}
       </span>
-      <Button 
-        variant="outline"
-        onClick={signOut}
-        className="border-blue-200 text-blue-600 hover:bg-blue-50"
+      <motion.button
+        onClick={handleSignOut}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
       >
+        <LogOut className="w-4 h-4" />
         Sign Out
-      </Button>
+      </motion.button>
     </div>
   );
 }

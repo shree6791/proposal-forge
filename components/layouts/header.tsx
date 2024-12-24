@@ -7,11 +7,13 @@ import { AuthButtons } from '../navigation/auth-buttons';
 import { navLinks } from '../navigation/nav-links';
 import { MobileMenu } from './mobile-menu';
 import { BrandLogo } from '../ui/brand/brand-logo';
+import { useSupabase } from '@/components/providers/supabase-provider';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const { user } = useSupabase();
 
   // Handle scroll effects
   useEffect(() => {
@@ -91,23 +93,8 @@ export function Header() {
               </motion.a>
             ))}
             
-            {/* Enhanced Auth Buttons */}
-            <div className="ml-4 flex items-center gap-2">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-2.5 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                Sign In
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-shadow"
-              >
-                Get Started
-              </motion.button>
-            </div>
+            {/* Auth Buttons */}
+            <AuthButtons />
           </nav>
 
           {/* Mobile Menu Button */}

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { BaseInput } from '@/components/ui/input/base-input';
+import { useState } from 'react';
 
 interface TicketInputsProps {
   incidentTickets: number;
@@ -45,6 +46,9 @@ export function TicketInputs({
   onChange,
   errors = {}
 }: TicketInputsProps) {
+  // Track which fields have been touched
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+
   const getFieldValue = (id: string) => {
     switch (id) {
       case 'incidentTickets': return incidentTickets;
@@ -64,6 +68,13 @@ export function TicketInputs({
     onChange(field, validatedValue);
   };
 
+  const handleBlur = (fieldId: string) => {
+    setTouchedFields(prev => ({
+      ...prev,
+      [fieldId]: true
+    }));
+  };
+
   return (
     <div className="space-y-6">
       {fields.map((field, index) => (
@@ -80,13 +91,14 @@ export function TicketInputs({
             name={field.id}
             value={getFieldValue(field.id) || ''}
             onChange={(e) => handleChange(field.id, e.target.value)}
+            onBlur={() => handleBlur(field.id)}
             placeholder={field.placeholder}
             error={errors[field.id]}
             helperText={field.description}
             required={field.required}
             min={field.min}
           />
-          {getFieldValue(field.id) === 0 && (
+          {touchedFields[field.id] && getFieldValue(field.id) === 0 && (
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

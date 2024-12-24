@@ -41,6 +41,12 @@ export default function InputProposalPage() {
     model: "gpt-4o-mini" as const,
   });
 
+  const [touchedTicketFields, setTouchedTicketFields] = useState({
+    incidentTickets: false,
+    serviceRequests: false,
+    changeTickets: false
+  });
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -51,6 +57,17 @@ export default function InputProposalPage() {
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (['incidentTickets', 'serviceRequests', 'changeTickets'].includes(field)) {
+      setTouchedTicketFields(prev => ({ ...prev, [field]: true }));
+    }
+  };
+
+  const areAllTicketFieldsTouched = () => {
+    return Object.values(touchedTicketFields).every(touched => touched);
+  };
+
+  const isSubmitDisabled = () => {
+    return !isFormComplete(formData) || !areAllTicketFieldsTouched() || isProcessing;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,6 +75,12 @@ export default function InputProposalPage() {
     
     if (!isFormComplete(formData)) {
       setToastMessage("Please complete all sections before generating the proposal.");
+      setShowToast(true);
+      return;
+    }
+
+    if (!areAllTicketFieldsTouched()) {
+      setToastMessage("Please fill in all ticket information fields.");
       setShowToast(true);
       return;
     }
@@ -110,7 +133,7 @@ export default function InputProposalPage() {
             </motion.div>
 
             <motion.h1 
-              className="text-5xl md:text-6xl font-bold mb-6 inline-flex items-center justify-center gap-2"
+              className="text-5xl md:text-6xl font-bold mb-6"
             >
               Create Your{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-gradient bg-[length:200%_auto]">
@@ -208,11 +231,11 @@ export default function InputProposalPage() {
           >
             <button
               type="submit"
-              disabled={!isFormComplete(formData) || isProcessing}
+              disabled={isSubmitDisabled()}
               className={`
                 px-8 py-4 rounded-xl text-white font-medium
                 transition-all duration-300 transform hover:scale-105
-                ${!isFormComplete(formData) || isProcessing
+                ${isSubmitDisabled()
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg'}
               `}

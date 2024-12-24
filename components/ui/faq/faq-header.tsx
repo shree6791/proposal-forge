@@ -21,21 +21,16 @@ export function FAQHeader() {
           Help Center
         </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-6"
+        <motion.h1 
+          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 whitespace-nowrap"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-gradient bg-[length:200%_auto] whitespace-nowrap">
-            Frequently Asked Questions
-          </h1>
-        </motion.div>
+          <span>Frequently </span>
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-gradient bg-[length:200%_auto]">
+            Asked Questions
+          </span>
+        </motion.h1>
 
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
           className="text-xl text-gray-600"
         >
           Find answers to common questions about ProposalForge and learn how we can help streamline your proposal creation process.
