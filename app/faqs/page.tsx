@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { FAQSearch } from '@/components/ui/faq/faq-search';
 import { FAQCategories } from '@/components/ui/faq/faq-categories';
 import { FAQItem } from '@/components/ui/faq/faq-item';
-import { PopularQuestions } from '@/components/ui/faq/popular-questions';
+// import { PopularQuestions } from '@/components/ui/faq/popular-questions';
 import { FAQCTA } from '@/components/ui/faq/faq-cta';
 import { faqData } from '@/lib/data/faq-data';
 import { useDebounce } from '@/lib/hooks/use-debounce';
@@ -78,12 +78,12 @@ export default function FAQs() {
           />
         </div>
 
-        <div className="mb-16">
+        {/* <div className="mb-16">
           <PopularQuestions 
             questions={faqData.popularQuestions}
             onQuestionClick={handleCategorySelect}
           />
-        </div>
+        </div> */}
 
         <div className="mb-12">
           <FAQCategories 
