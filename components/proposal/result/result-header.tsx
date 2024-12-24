@@ -17,14 +17,10 @@ export function ResultHeader({ companyName, clientName }: ResultHeaderProps) {
     >
       <BackButton href="/inputproposal" className="mb-6" />
       <h1 className="text-4xl font-bold mb-4">
-        Your{" "}
         <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-          Generated Proposal
+          {companyName}'s proposal for {clientName}
         </span>
       </h1>
-      <p className="text-xl text-gray-600">
-        {companyName}'s proposal for {clientName}
-      </p>
     </motion.div>
   );
 }
