@@ -53,15 +53,6 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
       <AnimatedBackground />
       
-      {/* Logo */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="absolute top-8 left-8"
-      >
-        <BrandLogo />
-      </motion.div>
-      
       <div className="max-w-6xl w-full flex flex-col md:flex-row gap-12 items-center relative">
         {/* Left Side - Form */}
         <motion.div 
