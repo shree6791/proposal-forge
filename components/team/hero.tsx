@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-export function LeadershipHero() {
+export function TeamHero() {
   return (
     <section className="relative py-20 overflow-hidden">
       <motion.div 
@@ -13,7 +13,7 @@ export function LeadershipHero() {
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           Meet Our{" "}
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-            Leadership Team
+            Team
           </span>
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">

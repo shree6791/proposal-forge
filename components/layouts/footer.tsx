@@ -28,8 +28,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/leadership" className="hover:text-white transition-colors">
-                  Leadership
+                <Link href="/team" className="hover:text-white transition-colors">
+                  Team
                 </Link>
               </li>
               <li>
