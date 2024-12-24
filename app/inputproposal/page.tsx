@@ -1,20 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from '@/lib/framer-motion';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useFormValidation } from '@/hooks/use-form-validation';
 import { ClientStorage } from "@/lib/client-storage";
-import { FormSteps } from '@/components/ui/form/form-steps';
-import { FormSection } from '@/components/ui/form/form-section';
-import { TopicSelection } from '@/components/ui/form/topic-selection';
-import { ClientObjectives } from '@/components/ui/form/client-objectives';
-import { TicketInputs } from '@/components/ui/form/ticket-inputs';
+import { FormSteps } from '@/components/proposal/input/form-steps';
+import { FormSection } from '@/components/proposal/input/form-section';
+import { TopicSelection } from '@/components/proposal/input/topic-selection';
+import { ClientObjectives } from '@/components/proposal/input/client-objectives';
+import { TicketInputs } from '@/components/proposal/input/ticket-inputs';
 import { SimpleToast } from '@/components/ui/feedback/simple-toast';
 import { useFormSteps } from '@/lib/hooks/use-form-steps';
 import { BaseInput } from '@/components/ui/input/base-input';
-import { Sparkles } from 'lucide-react';
+import { AnimatedBackground } from '@/components/ui/animated-background';
 
 const initialSteps = [
   { id: 'topic', title: 'Topic', isCompleted: false, isActive: true },
@@ -87,34 +88,41 @@ export default function InputProposalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
-      <div className="relative py-16 bg-gradient-to-b from-gray-50 to-white">
+      <div className="relative py-24 overflow-hidden">
+        <AnimatedBackground />
+        
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-blue-600 text-sm font-medium mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50/80 backdrop-blur-sm rounded-full text-blue-600 text-sm font-medium mb-6 border border-blue-100/50 shadow-lg"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 animate-pulse" />
               AI-Powered Proposal Generator
             </motion.div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <motion.h1 
+              className="text-5xl md:text-6xl font-bold mb-6 inline-flex items-center justify-center gap-2"
+            >
               Create Your{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-gradient bg-[length:200%_auto]">
                 Winning Proposal
               </span>
-            </h1>
-            <p className="text-lg text-gray-600">
+            </motion.h1>
+
+            <motion.p 
+              className="text-xl text-gray-600"
+            >
               Follow our guided process to generate a professional, AI-powered proposal tailored to your needs.
-            </p>
+            </motion.p>
           </motion.div>
         </div>
       </div>
@@ -125,91 +133,71 @@ export default function InputProposalPage() {
 
         <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto">
           {/* Topic Selection */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-8"
+          <FormSection 
+            title="Select Proposal Topic" 
+            description="Choose the type of proposal you want to generate"
+            isActive={steps[0].isActive}
           >
-            <FormSection 
-              title="Select Proposal Topic" 
-              description="Choose the type of proposal you want to generate"
-            >
-              <TopicSelection
-                selectedTopic={formData.selectedTopic}
-                onTopicChange={(topic) => handleInputChange('selectedTopic', topic)}
-              />
-            </FormSection>
-          </motion.div>
+            <TopicSelection
+              selectedTopic={formData.selectedTopic}
+              onTopicChange={(topic) => handleInputChange('selectedTopic', topic)}
+            />
+          </FormSection>
 
           {/* Company Details */}
           {formData.selectedTopic && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-8"
+            <FormSection 
+              title="Company Details" 
+              description="Enter your company and client information"
+              isActive={steps[1].isActive}
             >
-              <FormSection 
-                title="Company Details" 
-                description="Enter your company and client information"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <BaseInput
-                    label="Your Company Name"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={(e) => handleInputChange('companyName', e.target.value)}
-                    required
-                  />
-                  <BaseInput
-                    label="Client Name"
-                    name="clientName"
-                    value={formData.clientName}
-                    onChange={(e) => handleInputChange('clientName', e.target.value)}
-                    required
-                  />
-                </div>
-              </FormSection>
-            </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <BaseInput
+                  label="Your Company Name"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  required
+                />
+                <BaseInput
+                  label="Client Name"
+                  name="clientName"
+                  value={formData.clientName}
+                  onChange={(e) => handleInputChange('clientName', e.target.value)}
+                  required
+                />
+              </div>
+            </FormSection>
           )}
 
           {/* Client Objectives */}
           {formData.companyName && formData.clientName && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-8"
+            <FormSection 
+              title="Client Objectives" 
+              description="Select all objectives that apply"
+              isActive={steps[2].isActive}
             >
-              <FormSection 
-                title="Client Objectives" 
-                description="Select all objectives that apply"
-              >
-                <ClientObjectives
-                  selectedObjectives={formData.clientObjectives}
-                  onChange={(objectives) => handleInputChange('clientObjectives', objectives)}
-                />
-              </FormSection>
-            </motion.div>
+              <ClientObjectives
+                selectedObjectives={formData.clientObjectives}
+                onChange={(objectives) => handleInputChange('clientObjectives', objectives)}
+              />
+            </FormSection>
           )}
 
           {/* Ticket Information */}
           {formData.clientObjectives.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-8"
+            <FormSection 
+              title="Ticket Information" 
+              description="Enter monthly ticket volumes"
+              isActive={steps[3].isActive}
             >
-              <FormSection 
-                title="Ticket Information" 
-                description="Enter monthly ticket volumes"
-              >
-                <TicketInputs
-                  incidentTickets={formData.incidentTickets}
-                  serviceRequests={formData.serviceRequests}
-                  changeTickets={formData.changeTickets}
-                  onChange={handleInputChange}
-                />
-              </FormSection>
-            </motion.div>
+              <TicketInputs
+                incidentTickets={formData.incidentTickets}
+                serviceRequests={formData.serviceRequests}
+                changeTickets={formData.changeTickets}
+                onChange={handleInputChange}
+              />
+            </FormSection>
           )}
 
           {/* Submit Button */}

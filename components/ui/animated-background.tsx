@@ -1,16 +1,43 @@
+"use client";
+
+import { motion } from 'framer-motion';
+
 export function AnimatedBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-50" />
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white to-purple-50/90" />
       
-      {/* Animated circles */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000" />
-      <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000" />
+      <motion.div 
+        className="absolute top-1/4 -right-48 w-[800px] h-[800px] bg-blue-400/20 rounded-full"
+        animate={{
+          scale: [1, 1.2, 1],
+          x: [0, 40, 0],
+          rotate: [0, 45, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{ filter: 'blur(120px)' }}
+      />
       
-      {/* Grid pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+      <motion.div 
+        className="absolute -bottom-24 -left-48 w-[800px] h-[800px] bg-purple-400/20 rounded-full"
+        animate={{
+          scale: [1, 1.1, 1],
+          x: [0, -40, 0],
+          rotate: [0, -45, 0],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{ filter: 'blur(120px)' }}
+      />
+
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.015]" />
     </div>
   );
 }

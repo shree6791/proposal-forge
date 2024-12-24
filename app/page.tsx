@@ -1,6 +1,7 @@
 "use client";
 
 import { HeroSection } from '@/components/ui/hero-section';
+import { ClientLogos } from '@/components/ui/sections/client-logos';
 import { StatsSection } from '@/components/ui/sections/stats-section';
 import { FeaturesSection } from '@/components/ui/sections/features-section';
 import { TestimonialsSection } from '@/components/ui/sections/testimonials-section';
@@ -15,9 +16,20 @@ export default function Home() {
         ctaText="Start Creating Proposals"
         ctaLink="/credentials"
       />
+
+      {/* Client Logos */}
+      <ClientLogos />
+
+      {/* Enhanced Stats Section */}
       <StatsSection />
+
+      {/* Enhanced Features Section */}
       <FeaturesSection />
+
+      {/* Enhanced Testimonials Section */}
       <TestimonialsSection />
+
+      {/* Enhanced CTA Section */}
       <CTASection />
     </div>
   );

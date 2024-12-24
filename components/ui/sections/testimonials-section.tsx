@@ -12,7 +12,7 @@ const testimonials = [
     role: "VP of Sales",
     company: "TechVision Solutions",
     rating: 5,
-    image: "/images/testimonials/sarah.jpg"
+    gradient: "from-blue-500 to-purple-500"
   },
   {
     quote: "The AI-powered insights and industry-specific templates have given us a competitive edge in enterprise deals.",
@@ -20,7 +20,7 @@ const testimonials = [
     role: "Head of Business Development",
     company: "Enterprise Systems Inc",
     rating: 5,
-    image: "/images/testimonials/michael.jpg"
+    gradient: "from-purple-500 to-pink-500"
   },
   {
     quote: "Finally, a proposal solution that understands B2B complexity. The automation and compliance features are game-changing.",
@@ -28,7 +28,7 @@ const testimonials = [
     role: "Director of Operations",
     company: "Global Solutions Ltd",
     rating: 5,
-    image: "/images/testimonials/jessica.jpg"
+    gradient: "from-pink-500 to-red-500"
   }
 ];
 
@@ -36,11 +36,36 @@ export function TestimonialsSection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-blue-100/50 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-100/50 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
+    <section ref={ref} className="relative py-24 overflow-hidden">
+      {/* Enhanced animated background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-purple-50/30 to-blue-50/30 transition-colors duration-1000" />
+        <motion.div 
+          className="absolute top-0 -right-48 w-[800px] h-[800px] bg-blue-400/10 rounded-full mix-blend-multiply filter blur-[140px]"
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 40, 0],
+            y: [0, -40, 0],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-0 -left-48 w-[800px] h-[800px] bg-purple-400/10 rounded-full mix-blend-multiply filter blur-[140px]"
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, -40, 0],
+            y: [0, 40, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative">
@@ -70,7 +95,8 @@ export function TestimonialsSection() {
               custom={index}
               initial="hidden"
               animate={isVisible ? "visible" : "hidden"}
-              className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+              className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Quote className="w-10 h-10 text-blue-100 absolute top-6 left-6" />
               
@@ -84,7 +110,7 @@ export function TestimonialsSection() {
                 <p className="text-gray-600 mb-6 relative z-10">"{testimonial.quote}"</p>
                 
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                  <div className={`h-12 w-12 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-lg transform transition-transform duration-300 group-hover:scale-110`}>
                     {testimonial.author[0]}
                   </div>
                   <div>
@@ -93,6 +119,9 @@ export function TestimonialsSection() {
                   </div>
                 </div>
               </div>
+
+              {/* Enhanced gradient overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-0 group-hover:opacity-[0.03] rounded-2xl transition-all duration-500`} />
             </motion.div>
           ))}
         </div>

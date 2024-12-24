@@ -1,23 +1,18 @@
 "use client";
 
-import { CTAContainer } from '../ui/cta/cta-container';
-import { CTAContent } from '../ui/cta/cta-content';
-import { CTAButtons } from '../ui/cta/cta-buttons';
+import { CTABackground } from './cta/cta-background';
+import { CTAContent } from './cta/cta-content';
+import { CTAButtons } from './cta/cta-buttons';
 
 export function AboutCTA() {
   return (
-    <CTAContainer>
-      <CTAContent
-        title="Ready to Transform Your Proposal Process?"
-        description="Join thousands of businesses creating winning proposals with ProposalForge's AI-powered platform."
-      >
-        <CTAButtons
-          primaryLink="/credentials"
-          primaryText="Get Started Now"
-          secondaryLink="/contact"
-          secondaryText="Contact Sales"
-        />
-      </CTAContent>
-    </CTAContainer>
+    <section className="relative py-32 overflow-hidden">
+      <CTABackground />
+      
+      <div className="container mx-auto px-4 relative">
+        <CTAContent />
+        <CTAButtons />
+      </div>
+    </section>
   );
 }

@@ -51,8 +51,37 @@ export function FeaturesSection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-24 bg-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white pointer-events-none" />
+    <section ref={ref} className="relative py-24 overflow-hidden">
+      {/* Enhanced animated background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 transition-colors duration-1000" />
+        <motion.div 
+          className="absolute top-1/4 -right-48 w-[600px] h-[600px] bg-blue-400/20 rounded-full filter blur-[120px]"
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 30, 0],
+            rotate: [0, 45, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div 
+          className="absolute -bottom-24 -left-48 w-[600px] h-[600px] bg-purple-400/20 rounded-full filter blur-[120px]"
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, -30, 0],
+            rotate: [0, -45, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
       
       <div className="container mx-auto px-4">
         <motion.div 
@@ -90,11 +119,14 @@ export function FeaturesSection() {
               custom={index}
               initial="hidden"
               animate={isVisible ? "visible" : "hidden"}
-              className="group relative bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+              className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${feature.gradient} mb-4 text-white`}>
+              <motion.div 
+                className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${feature.gradient} mb-4 text-white transform transition-transform duration-300 group-hover:scale-110`}
+              >
                 <feature.icon className="w-6 h-6" />
-              </div>
+              </motion.div>
               
               <h3 className="text-xl font-semibold mb-2 text-gray-900 transition-colors duration-200 group-hover:text-blue-600">
                 {feature.title}
@@ -104,10 +136,8 @@ export function FeaturesSection() {
                 {feature.description}
               </p>
 
-              {/* Gradient overlay with reduced opacity and no backdrop-filter */}
-              <div 
-                className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} rounded-2xl opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300`}
-              />
+              {/* Enhanced gradient overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-[0.05] rounded-2xl transition-all duration-500`} />
             </motion.div>
           ))}
         </div>

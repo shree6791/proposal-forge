@@ -36,7 +36,38 @@ export function StatsSection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-24 bg-gray-50 relative overflow-hidden">
+    <section ref={ref} className="relative py-24 overflow-hidden">
+      {/* Enhanced animated background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white transition-colors duration-1000" />
+        <motion.div 
+          className="absolute top-0 -left-48 w-96 h-96 bg-blue-400/20 rounded-full filter blur-[100px]"
+          animate={{
+            x: [0, 50, 0],
+            y: [0, 30, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-0 -right-48 w-96 h-96 bg-purple-400/20 rounded-full filter blur-[100px]"
+          animate={{
+            x: [0, -50, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
+
       <div className="container mx-auto px-4">
         <motion.div 
           initial="hidden"
@@ -64,9 +95,10 @@ export function StatsSection() {
               custom={index}
               initial="hidden"
               animate={isVisible ? "visible" : "hidden"}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
               className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <div className={`absolute h-1 top-0 left-0 right-0 bg-gradient-to-r ${stat.gradient} rounded-t-2xl`} />
+              <div className={`absolute h-1 top-0 left-0 right-0 bg-gradient-to-r ${stat.gradient} rounded-t-2xl transform origin-left transition-transform duration-300 group-hover:scale-x-100`} />
               
               <h3 className={`text-4xl font-bold bg-gradient-to-r ${stat.gradient} text-transparent bg-clip-text mb-2`}>
                 {stat.value}
@@ -79,6 +111,9 @@ export function StatsSection() {
               <p className="text-sm text-gray-600">
                 {stat.metric}
               </p>
+
+              {/* Subtle gradient overlay on hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-[0.03] rounded-2xl transition-opacity duration-300`} />
             </motion.div>
           ))}
         </div>

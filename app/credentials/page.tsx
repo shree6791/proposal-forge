@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/providers/supabase-provider';
 import { CredentialsForm } from '@/components/auth/credentials-form';
 import { AuthSocialProof } from '@/components/auth/social-proof';
-import { AuthBackground } from '@/components/auth/background';
-import { Lock } from 'lucide-react';
+import { AnimatedBackground } from '@/components/ui/animated-background';
+import { BrandLogo } from '@/components/ui/brand/brand-logo';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -51,7 +51,16 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
-      <AuthBackground />
+      <AnimatedBackground />
+      
+      {/* Logo */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="absolute top-8 left-8"
+      >
+        <BrandLogo />
+      </motion.div>
       
       <div className="max-w-6xl w-full flex flex-col md:flex-row gap-12 items-center relative">
         {/* Left Side - Form */}
@@ -60,18 +69,7 @@ export default function AuthPage() {
           animate={{ opacity: 1, x: 0 }}
           className="w-full md:w-1/2"
         >
-          <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-            {/* Auth Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-blue-600 text-sm font-medium mb-6"
-            >
-              <Lock className="w-4 h-4" />
-              Secure Authentication
-            </motion.div>
-
+          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-100">
             <CredentialsForm
               isSignUp={isSignUp}
               handleSubmit={async (email: string, password: string) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { TeamHero } from '@/components/team/hero';
+import { TeamHero } from '@/components/team/team-hero';
 import { TeamGrid } from '@/components/team/team-grid';
 import { JoinTeam } from '@/components/team/join-team';
 

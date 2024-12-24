@@ -1,4 +1,5 @@
-import { useState } from 'react';
+"use client";
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
@@ -8,38 +9,65 @@ interface FAQItemProps {
   isOpen: boolean;
   onToggle: () => void;
   index: number;
+  searchQuery?: string;
 }
 
-export function FAQItem({ question, answer, isOpen, onToggle, index }: FAQItemProps) {
+export function FAQItem({ 
+  question, 
+  answer, 
+  isOpen, 
+  onToggle, 
+  index,
+  searchQuery = ''
+}: FAQItemProps) {
+  // Highlight matching text if there's a search query
+  const highlightText = (text: string) => {
+    if (!searchQuery) return text;
+    
+    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
+    return parts.map((part, i) => 
+      part.toLowerCase() === searchQuery.toLowerCase() ? (
+        <span key={i} className="bg-yellow-200 rounded px-1">{part}</span>
+      ) : part
+    );
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="mb-4"
+      className="group"
     >
-      <button
+      <motion.button
         onClick={onToggle}
         className={`
-          w-full p-6 rounded-xl text-left transition-all duration-200
+          w-full p-6 rounded-xl text-left transition-all duration-300
           ${isOpen 
-            ? 'bg-gradient-to-r from-blue-50 to-purple-50 shadow-md' 
+            ? 'bg-gradient-to-r from-blue-50/80 to-purple-50/80 backdrop-blur-sm shadow-lg' 
             : 'bg-white hover:bg-gray-50 shadow-sm'}
         `}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-4">
           <h3 className={`
-            text-lg font-medium transition-colors duration-200
+            text-lg font-medium transition-colors duration-300
             ${isOpen ? 'text-blue-600' : 'text-gray-900 group-hover:text-blue-600'}
           `}>
-            {question}
+            {highlightText(question)}
           </h3>
-          <ChevronDown
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
             className={`
-              w-5 h-5 transition-transform duration-200
-              ${isOpen ? 'rotate-180 text-blue-600' : 'text-gray-500'}
+              flex-shrink-0 w-6 h-6 rounded-full 
+              ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'}
+              flex items-center justify-center transition-colors duration-300
             `}
-          />
+          >
+            <ChevronDown className="w-4 h-4" />
+          </motion.div>
         </div>
         
         <AnimatePresence>
@@ -48,16 +76,16 @@ export function FAQItem({ question, answer, isOpen, onToggle, index }: FAQItemPr
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3 }}
               className="mt-4 text-gray-600 overflow-hidden"
             >
               <div className="prose prose-blue max-w-none">
-                {answer}
+                {highlightText(answer)}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </button>
+      </motion.button>
     </motion.div>
   );
 }

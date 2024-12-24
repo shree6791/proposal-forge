@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { Mail, Lock, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { AuthFormField } from './auth-form-field';
 import { PasswordStrength } from './password-strength';
 
@@ -38,8 +39,12 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold mb-2">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           {isSignUp ? 'Create an Account' : 'Welcome Back'}
         </h2>
         <p className="text-gray-600">
@@ -48,7 +53,7 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
             : 'Sign in to continue with ProposalForge'
           }
         </p>
-      </div>
+      </motion.div>
 
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <AuthFormField
@@ -83,22 +88,28 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-3 text-sm text-red-600 bg-red-50 rounded-lg"
+          >
             {error}
-          </div>
+          </motion.div>
         )}
 
-        <button
+        <motion.button
           type="submit"
           disabled={isSubmitting}
           className={`
-            w-full px-6 py-3 rounded-lg font-medium text-white
-            transition-all duration-300 transform hover:scale-105
+            relative w-full px-6 py-4 rounded-xl font-medium text-white
+            transition-all duration-300
             flex items-center justify-center gap-2
             ${isSubmitting 
               ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg'}
+              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:scale-[1.02]'}
           `}
+          whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+          whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
         >
           {isSubmitting ? (
             <>
@@ -106,22 +117,30 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
               Please wait...
             </>
           ) : (
-            isSignUp ? 'Create Account' : 'Sign In'
+            <>
+              {isSignUp ? 'Create Account' : 'Sign In'}
+              <ArrowRight className="w-5 h-5" />
+            </>
           )}
-        </button>
+        </motion.button>
       </form>
 
-      <div className="mt-6 text-center">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="mt-6 text-center"
+      >
         <button
           type="button"
           onClick={onToggleMode}
-          className="text-sm text-blue-600 hover:text-blue-800"
+          className="text-sm text-blue-600 hover:text-blue-800 font-medium"
         >
           {isSignUp 
             ? 'Already have an account? Sign in' 
             : 'Need an account? Sign up'}
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }
