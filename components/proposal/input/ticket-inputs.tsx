@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { BaseInput } from '@/components/ui/input/base-input';
 import { useState } from 'react';
+import { Info } from 'lucide-react';
 
 interface TicketInputsProps {
   incidentTickets: number;
@@ -17,7 +18,7 @@ const fields = [
     id: "incidentTickets",
     label: "Incident Tickets (per month)",
     placeholder: "e.g., 100",
-    description: "Number of incidents requiring support intervention",
+    description: "Address disruptions (e.g., crashes, errors) to restore normal operations quickly.",
     required: true,
     min: 0
   },
@@ -25,7 +26,7 @@ const fields = [
     id: "serviceRequests",
     label: "Service Requests (per month)",
     placeholder: "e.g., 250",
-    description: "Standard service and access requests",
+    description: "Handle routine tasks like account setup or permissions.",
     required: true,
     min: 0
   },
@@ -33,7 +34,7 @@ const fields = [
     id: "changeTickets",
     label: "Change Tickets (per month)",
     placeholder: "e.g., 50",
-    description: "System changes and enhancements",
+    description: "Manage controlled changes, such as updates or feature modifications.",
     required: true,
     min: 0
   }
@@ -48,6 +49,7 @@ export function TicketInputs({
 }: TicketInputsProps) {
   // Track which fields have been touched
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   const getFieldValue = (id: string) => {
     switch (id) {
@@ -85,19 +87,40 @@ export function TicketInputs({
           transition={{ delay: index * 0.1 }}
           className="relative"
         >
+          <div className="flex items-center gap-2 mb-1">
+            <label className="block text-sm font-medium text-gray-700">
+              {field.label}
+            </label>
+            <div className="relative">
+              <Info
+                className="w-4 h-4 text-gray-400 cursor-help hover:text-blue-500 transition-colors"
+                onMouseEnter={() => setActiveTooltip(field.id)}
+                onMouseLeave={() => setActiveTooltip(null)}
+              />
+              {activeTooltip === field.id && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute left-6 top-0 z-50 w-64 p-3 text-sm bg-white text-gray-600 rounded-lg shadow-lg border border-gray-100"
+                >
+                  {field.description}
+                </motion.div>
+              )}
+            </div>
+          </div>
+
           <BaseInput
             type="number"
-            label={field.label}
             name={field.id}
             value={getFieldValue(field.id) || ''}
             onChange={(e) => handleChange(field.id, e.target.value)}
             onBlur={() => handleBlur(field.id)}
             placeholder={field.placeholder}
             error={errors[field.id]}
-            helperText={field.description}
             required={field.required}
             min={field.min}
           />
+          
           {touchedFields[field.id] && getFieldValue(field.id) === 0 && (
             <motion.p 
               initial={{ opacity: 0 }}
