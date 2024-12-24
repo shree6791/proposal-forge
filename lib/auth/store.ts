@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthState, AuthActions, User } from './types';
 import { AUTH_STORAGE_KEY } from './constants';
-import { supabase } from '../supabase/client';
+import { AuthService } from '@/lib/auth/service';
 
 export const useAuthStore = create<AuthState & AuthActions>()(
   persist(
@@ -19,7 +19,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       },
       signOut: async () => {
         try {
-          await supabase.auth.signOut();
+          await AuthService.signOut();
           set({ user: null, isAuthenticated: false });
           localStorage.clear();
         } catch (error) {

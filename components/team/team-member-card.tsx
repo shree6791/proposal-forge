@@ -23,7 +23,7 @@ export function TeamMemberCard({ name, role, description, image, socialLinks }: 
     >
       {/* Image Container */}
       <div className="relative h-80 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent z-10" />
         <motion.img
           src={image}
           alt={name}
@@ -46,10 +46,15 @@ export function TeamMemberCard({ name, role, description, image, socialLinks }: 
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-2xl font-bold text-gray-900 mb-1">{name}</h3>
+        <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+          {name}
+        </h3>
         <p className="text-blue-600 font-medium mb-4">{role}</p>
         <p className="text-gray-600 leading-relaxed">{description}</p>
       </div>
+
+      {/* Gradient Border */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
     </motion.div>
   );
 }
@@ -62,7 +67,7 @@ function SocialLink({ href, icon: Icon }: { href: string; icon: any }) {
       rel="noopener noreferrer"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
+      className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors duration-200 shadow-lg"
     >
       <Icon className="w-5 h-5" />
     </motion.a>

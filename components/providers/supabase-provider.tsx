@@ -1,23 +1,23 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createClientComponentClient, type User } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Database } from './types';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
+import type { Database } from './types';
 
-type SupabaseContextType = {
+type SupabaseContext = {
+  supabase: SupabaseClient<Database>;
   user: User | null;
   isLoading: boolean;
-  supabase: ReturnType<typeof createClientComponentClient<Database>>;
-
 };
 
-const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined);
+const Context = createContext<SupabaseContext | undefined>(undefined);
 
 export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClientComponentClient<any>();
+  const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {
@@ -52,14 +52,14 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   }, [supabase, router]);
 
   return (
-    <SupabaseContext.Provider value={{ user, isLoading, supabase }}>
+    <Context.Provider value={{ supabase, user, isLoading }}>
       {children}
-    </SupabaseContext.Provider>
+    </Context.Provider>
   );
 }
 
 export function useSupabase() {
-  const context = useContext(SupabaseContext);
+  const context = useContext(Context);
   if (!context) {
     throw new Error('useSupabase must be used within a SupabaseProvider');
   }

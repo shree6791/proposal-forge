@@ -11,7 +11,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <HeroSection
         title="Create Winning B2B Proposals in Minutes"
-        subtitle="Turbocharge your sales with AI-generated, high-quality, error-free proposals tailored to impress clients"
+        subtitle="Transform your sales process with AI-powered proposals that win more deals. Save time, increase accuracy, and close more business."
         ctaText="Start Creating Proposals"
         ctaLink="/credentials"
       />

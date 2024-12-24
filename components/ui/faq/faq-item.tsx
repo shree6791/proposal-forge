@@ -20,16 +20,25 @@ export function FAQItem({ question, answer, isOpen, onToggle, index }: FAQItemPr
     >
       <button
         onClick={onToggle}
-        className="w-full p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-left group"
+        className={`
+          w-full p-6 rounded-xl text-left transition-all duration-200
+          ${isOpen 
+            ? 'bg-gradient-to-r from-blue-50 to-purple-50 shadow-md' 
+            : 'bg-white hover:bg-gray-50 shadow-sm'}
+        `}
       >
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+          <h3 className={`
+            text-lg font-medium transition-colors duration-200
+            ${isOpen ? 'text-blue-600' : 'text-gray-900 group-hover:text-blue-600'}
+          `}>
             {question}
           </h3>
           <ChevronDown
-            className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-              isOpen ? 'rotate-180' : ''
-            }`}
+            className={`
+              w-5 h-5 transition-transform duration-200
+              ${isOpen ? 'rotate-180 text-blue-600' : 'text-gray-500'}
+            `}
           />
         </div>
         
@@ -42,7 +51,9 @@ export function FAQItem({ question, answer, isOpen, onToggle, index }: FAQItemPr
               transition={{ duration: 0.2 }}
               className="mt-4 text-gray-600 overflow-hidden"
             >
-              {answer}
+              <div className="prose prose-blue max-w-none">
+                {answer}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

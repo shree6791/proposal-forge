@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from '@/lib/framer-motion';
 import { useAuth } from '@/hooks/use-auth';
 import { useFormValidation } from '@/hooks/use-form-validation';
 import { ClientStorage } from "@/lib/client-storage";
@@ -13,9 +14,7 @@ import { TicketInputs } from '@/components/ui/form/ticket-inputs';
 import { SimpleToast } from '@/components/ui/feedback/simple-toast';
 import { useFormSteps } from '@/lib/hooks/use-form-steps';
 import { BaseInput } from '@/components/ui/input/base-input';
-import { ProposalHeader } from '@/components/proposal/input/proposal-header';
-import { ProposalCard } from '@/components/proposal/input/proposal-card';
-import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 const initialSteps = [
   { id: 'topic', title: 'Topic', isCompleted: false, isActive: true },
@@ -88,13 +87,49 @@ export default function InputProposalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 py-12">
-        <ProposalHeader />
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <div className="relative py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-blue-600 text-sm font-medium mb-6"
+            >
+              <Sparkles className="w-4 h-4" />
+              AI-Powered Proposal Generator
+            </motion.div>
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Create Your{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+                Winning Proposal
+              </span>
+            </h1>
+            <p className="text-lg text-gray-600">
+              Follow our guided process to generate a professional, AI-powered proposal tailored to your needs.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 pb-24">
         <FormSteps steps={steps} />
 
         <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto">
-          <ProposalCard isActive={steps[0].isActive}>
+          {/* Topic Selection */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8"
+          >
             <FormSection 
               title="Select Proposal Topic" 
               description="Choose the type of proposal you want to generate"
@@ -104,10 +139,15 @@ export default function InputProposalPage() {
                 onTopicChange={(topic) => handleInputChange('selectedTopic', topic)}
               />
             </FormSection>
-          </ProposalCard>
+          </motion.div>
 
+          {/* Company Details */}
           {formData.selectedTopic && (
-            <ProposalCard isActive={steps[1].isActive}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-xl shadow-lg p-8"
+            >
               <FormSection 
                 title="Company Details" 
                 description="Enter your company and client information"
@@ -129,11 +169,16 @@ export default function InputProposalPage() {
                   />
                 </div>
               </FormSection>
-            </ProposalCard>
+            </motion.div>
           )}
 
+          {/* Client Objectives */}
           {formData.companyName && formData.clientName && (
-            <ProposalCard isActive={steps[2].isActive}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-xl shadow-lg p-8"
+            >
               <FormSection 
                 title="Client Objectives" 
                 description="Select all objectives that apply"
@@ -143,11 +188,16 @@ export default function InputProposalPage() {
                   onChange={(objectives) => handleInputChange('clientObjectives', objectives)}
                 />
               </FormSection>
-            </ProposalCard>
+            </motion.div>
           )}
 
+          {/* Ticket Information */}
           {formData.clientObjectives.length > 0 && (
-            <ProposalCard isActive={steps[3].isActive}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-xl shadow-lg p-8"
+            >
               <FormSection 
                 title="Ticket Information" 
                 description="Enter monthly ticket volumes"
@@ -159,9 +209,10 @@ export default function InputProposalPage() {
                   onChange={handleInputChange}
                 />
               </FormSection>
-            </ProposalCard>
+            </motion.div>
           )}
 
+          {/* Submit Button */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

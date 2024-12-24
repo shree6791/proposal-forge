@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { Mail, Lock, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { AuthFormField } from './auth-form-field';
-import { useAuth } from '@/hooks/use-auth';
+import { PasswordStrength } from './password-strength';
 
 interface CredentialsFormProps {
   isSignUp: boolean;
@@ -12,23 +11,26 @@ interface CredentialsFormProps {
   onToggleMode: () => void;
 }
 
-export function CredentialsForm({ isSignUp, onToggleMode }: CredentialsFormProps) {
-  const [email, setEmail] = useState('demo@example.com');
-  const [password, setPassword] = useState('demo123456');
+export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: CredentialsFormProps) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { signIn } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
-      await signIn(email, password);
+      const result = await handleSubmit(email, password);
+      if (!result.success && result.message) {
+        setError(result.message);
+      }
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in');
+      setError(err.message || 'Failed to authenticate');
     } finally {
       setIsSubmitting(false);
     }
@@ -48,7 +50,7 @@ export function CredentialsForm({ isSignUp, onToggleMode }: CredentialsFormProps
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleFormSubmit} className="space-y-6">
         <AuthFormField
           type="email"
           label="Email"
@@ -61,17 +63,24 @@ export function CredentialsForm({ isSignUp, onToggleMode }: CredentialsFormProps
           required
         />
 
-        <AuthFormField
-          type="password"
-          label="Password"
-          value={password}
-          onChange={setPassword}
-          icon={Lock}
-          isFocused={focusedField === 'password'}
-          onFocus={() => setFocusedField('password')}
-          onBlur={() => setFocusedField(null)}
-          required
-        />
+        <div className="space-y-2">
+          <AuthFormField
+            type="password"
+            label="Password"
+            value={password}
+            onChange={setPassword}
+            icon={Lock}
+            isFocused={focusedField === 'password'}
+            onFocus={() => setFocusedField('password')}
+            onBlur={() => setFocusedField(null)}
+            required
+            minLength={8}
+            showPasswordToggle
+            onTogglePassword={() => setShowPassword(!showPassword)}
+            showPassword={showPassword}
+          />
+          {isSignUp && <PasswordStrength password={password} />}
+        </div>
 
         {error && (
           <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
@@ -79,20 +88,27 @@ export function CredentialsForm({ isSignUp, onToggleMode }: CredentialsFormProps
           </div>
         )}
 
-        <Button
+        <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           disabled={isSubmitting}
+          className={`
+            w-full px-6 py-3 rounded-lg font-medium text-white
+            transition-all duration-300 transform hover:scale-105
+            flex items-center justify-center gap-2
+            ${isSubmitting 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg'}
+          `}
         >
           {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
               Please wait...
-            </span>
+            </>
           ) : (
             isSignUp ? 'Create Account' : 'Sign In'
           )}
-        </Button>
+        </button>
       </form>
 
       <div className="mt-6 text-center">

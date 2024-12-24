@@ -1,47 +1,58 @@
-import Link from 'next/link';
+"use client";
+
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import { AuthButtons } from '../navigation/auth-buttons';
 import { navLinks } from '../navigation/nav-links';
-import { Button } from '../ui/button';
+import { MobileMenu } from './mobile-menu';
+import { BrandLogo } from '../ui/brand/brand-logo';
+import { motion } from 'framer-motion';
 
 export function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-red-600 text-transparent bg-clip-text">
-            ProposalForge
-          </span>
-        </Link>
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-lg"
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <BrandLogo />
 
-        <nav className="hidden md:flex items-center space-x-4">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <Button variant="ghost" className="text-neutral-600 hover:text-primary-600">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                className="px-4 py-2 text-gray-600 hover:text-blue-600 rounded-lg transition-colors relative group"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 {link.label}
-              </Button>
-            </Link>
-          ))}
-          <AuthButtons />
-        </nav>
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </motion.a>
+            ))}
+            <AuthButtons />
+          </nav>
 
-        <Button variant="ghost" className="md:hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </Button>
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
       </div>
-    </header>
+
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+    </motion.header>
   );
 }

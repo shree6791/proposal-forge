@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import { FAQSearch } from '@/components/ui/faq/faq-search';
 import { FAQCategories } from '@/components/ui/faq/faq-categories';
 import { FAQItem } from '@/components/ui/faq/faq-item';
-// import { PopularQuestions } from '@/components/ui/faq/popular-questions';
 import { FAQCTA } from '@/components/ui/faq/faq-cta';
 import { faqData } from '@/lib/data/faq-data';
 import { useDebounce } from '@/lib/hooks/use-debounce';
+import { HelpCircle, Search } from 'lucide-react';
 
 export default function FAQs() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,24 +52,58 @@ export default function FAQs() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 py-12 md:py-20">
-        {/* Header Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Frequently Asked{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-              Questions
-            </span>
-          </h1>
-          <p className="text-lg text-gray-600">
-            Find answers to common questions about ProposalForge and learn how we can help streamline your proposal creation process.
-          </p>
-        </motion.div>
+      {/* Hero Section */}
+      <div className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white to-purple-50/90" />
+          <motion.div 
+            className="absolute top-1/4 -right-48 w-[500px] h-[500px] bg-blue-400/20 rounded-full filter blur-[100px]"
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, 30, 0],
+              rotate: [0, 45, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.015]" />
+        </div>
 
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-blue-600 text-sm font-medium mb-6"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Help Center
+            </motion.div>
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Frequently Asked{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+                Questions
+              </span>
+            </h1>
+            <p className="text-lg text-gray-600">
+              Find answers to common questions about ProposalForge and learn how we can help streamline your proposal creation process.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 pb-24">
+        {/* Search Section */}
         <div className="mb-16">
           <FAQSearch 
             value={searchQuery}
@@ -78,13 +112,7 @@ export default function FAQs() {
           />
         </div>
 
-        {/* <div className="mb-16">
-          <PopularQuestions 
-            questions={faqData.popularQuestions}
-            onQuestionClick={handleCategorySelect}
-          />
-        </div> */}
-
+        {/* Categories */}
         <div className="mb-12">
           <FAQCategories 
             categories={faqData.categories.map(cat => ({
@@ -96,6 +124,7 @@ export default function FAQs() {
           />
         </div>
 
+        {/* Questions */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -118,11 +147,13 @@ export default function FAQs() {
               animate={{ opacity: 1 }}
               className="text-center py-12"
             >
+              <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-600">No questions found matching your search.</p>
             </motion.div>
           )}
         </motion.div>
 
+        {/* CTA Section */}
         <div className="max-w-4xl mx-auto">
           <FAQCTA />
         </div>

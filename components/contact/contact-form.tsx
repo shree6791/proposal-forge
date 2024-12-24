@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Send, Loader2 } from 'lucide-react';
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
 
@@ -47,7 +48,7 @@ export function ContactForm() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       setSubmitStatus('error');
     } finally {
@@ -97,11 +98,26 @@ export function ContactForm() {
         )}
       </motion.div>
 
-      {/* Message Input */}
+      {/* Subject Input */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
+      >
+        <label className="block text-sm font-medium text-gray-700 mb-1">Subject (Optional)</label>
+        <input
+          type="text"
+          value={formData.subject}
+          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        />
+      </motion.div>
+
+      {/* Message Input */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
       >
         <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
         <textarea
@@ -121,15 +137,32 @@ export function ContactForm() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        transition={{ delay: 0.5 }}
       >
-        <Button
+        <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors duration-200"
+          className={`
+            w-full px-6 py-3 rounded-lg font-medium text-white
+            transition-all duration-300 transform hover:scale-105
+            flex items-center justify-center gap-2
+            ${isSubmitting 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg'}
+          `}
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
-        </Button>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              <Send className="w-5 h-5" />
+              Send Message
+            </>
+          )}
+        </button>
       </motion.div>
 
       {/* Status Messages */}
@@ -139,7 +172,7 @@ export function ContactForm() {
           animate={{ opacity: 1 }}
           className="text-green-600 text-center"
         >
-          Message sent successfully!
+          Message sent successfully! We'll get back to you soon.
         </motion.p>
       )}
 

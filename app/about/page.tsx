@@ -1,22 +1,20 @@
 "use client";
 
 import { AboutHero } from '@/components/about/hero';
-import { Mission } from '@/components/about/mission';
-import { Process } from '@/components/about/process';
-import { TechStack } from '@/components/about/tech-stack';
-import { Achievements } from '@/components/team/achievements';
-import { Values } from '@/components/team/values';
+import { AboutMission } from '@/components/about/mission';
+import { AboutValues } from '@/components/about/values';
+import { AboutProcess } from '@/components/about/process';
+import { AboutMetrics } from '@/components/about/metrics';
 import { AboutCTA } from '@/components/about/cta';
 
-export default function AboutUs() {
+export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       <AboutHero />
-      <Achievements />
-      <Mission />
-      <Values />
-      <Process />
-      <TechStack />
+      <AboutMetrics />
+      <AboutMission />
+      <AboutValues />
+      <AboutProcess />
       <AboutCTA />
     </div>
   );
