@@ -3,24 +3,23 @@
 import { motion } from 'framer-motion';
 import { FooterBrand } from './footer/footer-brand';
 import { FooterSection } from './footer/footer-section';
-import { FooterContact } from './footer/footer-contact';
 import { FooterBottom } from './footer/footer-bottom';
 
 const sections = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/#features" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "FAQs", href: "/faqs" }
-    ]
-  },
   {
     title: "Company",
     links: [
       { label: "About", href: "/about" },
       { label: "Team", href: "/team" },
       { label: "Contact", href: "/contact" }
+    ]
+  },
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "/#features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "FAQs", href: "/faqs" }
     ]
   },
   {
@@ -67,41 +66,32 @@ export function Footer() {
       <div className="container mx-auto px-4 relative">
         {/* Main Footer Content */}
         <div className="py-16 grid grid-cols-12 gap-8 border-b border-gray-800">
-          {/* Brand Section - Adjusted width */}
+          {/* Brand Section - Full width on mobile */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="col-span-12 lg:col-span-4"
+            className="col-span-12 lg:col-span-4 mb-8 lg:mb-0"
           >
-            <FooterBrand />
+            <FooterBrand showBenefits={false} />
           </motion.div>
 
-          {/* Navigation Sections - Adjusted spacing */}
-          <div className="col-span-12 lg:col-span-5 grid grid-cols-3 gap-4">
-            {sections.map((section, index) => (
-              <motion.div
-                key={section.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <FooterSection {...section} />
-              </motion.div>
-            ))}
+          {/* Navigation Sections - Responsive grid */}
+          <div className="col-span-12 lg:col-span-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              {sections.map((section, index) => (
+                <motion.div
+                  key={section.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <FooterSection {...section} />
+                </motion.div>
+              ))}
+            </div>
           </div>
-
-          {/* Contact Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="col-span-12 lg:col-span-3"
-          >
-            <FooterContact />
-          </motion.div>
         </div>
 
         {/* Footer Bottom */}
