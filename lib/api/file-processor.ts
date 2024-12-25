@@ -6,19 +6,17 @@ const openai = new OpenAI({
 
 export async function processFileContent(content: string): Promise<string[]> {
   try {
+    
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: `Extract the key business objectives from the provided text. 
-            Format them as a simple list without numbers or special characters.
-            Each objective should:
-            - Start directly with the objective text
-            - Be clear and actionable
-            - Be relevant to IT services and support
-            - Not include any numbering or bullet points
-            Ignore any irrelevant information.`
+          content: `Extract clear and actionable business objectives from the provided text. 
+            - Each objective should be concise and standalone.
+            - Focus on key goals or actions that are important to achieving business outcomes.
+            - Exclude irrelevant details or unrelated information.
+            - Avoid using numbers, bullet points, or special formatting characters.`
         },
         {
           role: "user",
@@ -28,7 +26,7 @@ export async function processFileContent(content: string): Promise<string[]> {
       temperature: 0.3,
       max_tokens: 500
     });
-
+    
     const objectives = response.choices[0].message.content
       ?.split('\n')
       .filter(line => line.trim().length > 0)
