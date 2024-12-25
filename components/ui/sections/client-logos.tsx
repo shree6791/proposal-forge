@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion';
 
 const logos = [
-  { name: 'Company 1', logo: '/logos/logo1.svg' },
-  { name: 'Company 2', logo: '/logos/logo2.svg' },
-  { name: 'Company 3', logo: '/logos/logo3.svg' },
-  { name: 'Company 4', logo: '/logos/logo4.svg' },
-  { name: 'Company 5', logo: '/logos/logo5.svg' }
+  { name: 'Apple', logo: '/images/apple.png' },
+  { name: 'Amazon', logo: '/images/amazon.png' },
+  { name: 'Google', logo: '/images/google.png' },
+  { name: 'Meta', logo: '/images/meta.png' },
+  { name: 'Netflix', logo: '/images/netflix.png' }
 ];
 
 export function ClientLogos() {
