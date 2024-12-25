@@ -6,7 +6,7 @@ export function useProposal() {
   const [isLoading, setIsLoading] = useState(true);
   const [proposalPart1, setProposalPart1] = useState("");
   const [proposalPart2, setProposalPart2] = useState("");
-  const [buttonText, setButtonText] = useState("Generate Part 2 of Proposal");
+  const [buttonText, setButtonText] = useState("Generate Advanced Proposal");
   const [isGeneratingPart2, setIsGeneratingPart2] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [error, setError] = useState<string | null>(null);

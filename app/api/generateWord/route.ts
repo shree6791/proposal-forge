@@ -10,7 +10,7 @@ import {
   Packer,
 } from "docx";
 
-export async function POST(req) {
+export async function POST(req:Request) {
   try {
     // Parse the request body
     const { companyName, clientName, part1Content, part2Content } = await req.json();
@@ -39,13 +39,12 @@ export async function POST(req) {
         }
       );
     }
-
     // Helper function to process content and create formatted paragraphs
-    const processContent = (content) => {
-      const paragraphs = [];
+    const processContent = (content: string): Paragraph[] => {
+      const paragraphs: Paragraph[] = [];
       const lines = content.split("\n");
 
-      lines.forEach((line) => {
+      lines.forEach((line: string) => {
         const trimmedLine = line.trim();
 
         if (trimmedLine.startsWith("- ")) {
@@ -205,7 +204,7 @@ export async function POST(req) {
     return new NextResponse(
       JSON.stringify({
         error: "Failed to generate document",
-        details: error.message,
+        details: process.env.NODE_ENV === "development" ? String(error) : undefined,
       }),
       {
         status: 500,

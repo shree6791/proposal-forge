@@ -57,14 +57,14 @@ export default function ResultPage() {
         {/* Proposal Content */}
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           <ProposalContent
-            title="Part 1: Initial Proposal"
+            title="Part 1: Core Proposal Outline"
             content={proposalPart1}
             buttonText="Part 1 of Proposal"
             variant="primary"
           />
 
           <ProposalContent
-            title="Part 2: Detailed Implementation"
+            title="Part 2: Advanced Proposal Section"
             content={proposalPart2}
             buttonText={buttonText}
             onButtonClick={generatePart2}
