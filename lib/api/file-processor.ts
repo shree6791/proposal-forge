@@ -12,8 +12,12 @@ export async function processFileContent(content: string): Promise<string[]> {
         {
           role: "system",
           content: `Extract the key business objectives from the provided text. 
-            Format them as a concise list of clear, actionable objectives.
-            Each objective should be relevant to IT services and support.
+            Format them as a simple list without numbers or special characters.
+            Each objective should:
+            - Start directly with the objective text
+            - Be clear and actionable
+            - Be relevant to IT services and support
+            - Not include any numbering or bullet points
             Ignore any irrelevant information.`
         },
         {
@@ -28,7 +32,8 @@ export async function processFileContent(content: string): Promise<string[]> {
     const objectives = response.choices[0].message.content
       ?.split('\n')
       .filter(line => line.trim().length > 0)
-      .map(line => line.replace(/^[-•*]\d*\.\s*/, '').trim());
+      // Remove any numbering, bullets, or special characters from the start
+      .map(line => line.replace(/^[-•*\d.)\s]+/, '').trim());
 
     return objectives || [];
   } catch (error) {

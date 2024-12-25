@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { FileUpload } from './file-upload';
-import { ObjectivesList } from './objectives-list';
+import { PredefinedObjectives } from './objectives/predefined-objectives';
+import { ObjectivesDivider } from './objectives/objectives-divider';
+import { SelectedObjectives } from './objectives/selected-objectives';
 
 interface ClientObjectivesProps {
   selectedObjectives: string[];
@@ -13,7 +16,9 @@ export function ClientObjectives({ selectedObjectives, onChange }: ClientObjecti
   const [error, setError] = useState<string | null>(null);
 
   const handleObjectivesExtracted = (objectives: string[]) => {
-    onChange(objectives);
+    // Merge new objectives with existing ones, avoiding duplicates
+    const mergedObjectives = [...new Set([...selectedObjectives, ...objectives])];
+    onChange(mergedObjectives);
     setError(null);
   };
 
@@ -21,35 +26,48 @@ export function ClientObjectives({ selectedObjectives, onChange }: ClientObjecti
     setError(errorMessage);
   };
 
+  const handleRemoveObjective = (objectiveToRemove: string) => {
+    onChange(selectedObjectives.filter(obj => obj !== objectiveToRemove));
+  };
+
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Choose your input method:</h3>
-        
+      {/* File Upload Section */}
+      <div className="bg-white p-8 rounded-xl border-2 border-dashed border-gray-200">
+        <h3 className="text-lg font-semibold mb-4">Upload Your Objectives Document</h3>
+        <p className="text-gray-600 text-sm mb-6">
+          Upload a document containing your business objectives. You can upload multiple times to add more objectives.
+        </p>
         <FileUpload 
           onObjectivesExtracted={handleObjectivesExtracted}
           onError={handleError}
         />
-
-        {error && (
-          <p className="text-sm text-red-600">{error}</p>
-        )}
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="px-2 bg-white text-sm text-gray-500">
-              or choose from predefined objectives
-            </span>
-          </div>
-        </div>
       </div>
 
-      <ObjectivesList 
+      {/* Divider */}
+      <ObjectivesDivider />
+
+      {/* Predefined Objectives */}
+      <PredefinedObjectives 
         selectedObjectives={selectedObjectives}
         onChange={onChange}
+      />
+
+      {/* Error Message */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="p-4 bg-red-50 text-red-600 rounded-lg"
+        >
+          {error}
+        </motion.div>
+      )}
+
+      {/* Selected Objectives Summary */}
+      <SelectedObjectives 
+        objectives={selectedObjectives}
+        onRemove={handleRemoveObjective}
       />
     </div>
   );
