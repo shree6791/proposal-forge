@@ -6,6 +6,7 @@ import { FileUpload } from './file-upload';
 import { PredefinedObjectives } from './objectives/predefined-objectives';
 import { ObjectivesDivider } from './objectives/objectives-divider';
 import { SelectedObjectives } from './objectives/selected-objectives';
+import { ProTip } from '@/components/ui/pro-tip';
 
 interface ClientObjectivesProps {
   selectedObjectives: string[];
@@ -16,7 +17,6 @@ export function ClientObjectives({ selectedObjectives, onChange }: ClientObjecti
   const [error, setError] = useState<string | null>(null);
 
   const handleObjectivesExtracted = (objectives: string[]) => {
-    // Merge new objectives with existing ones, avoiding duplicates
     const mergedObjectives = [...new Set([...selectedObjectives, ...objectives])];
     onChange(mergedObjectives);
     setError(null);
@@ -32,6 +32,12 @@ export function ClientObjectives({ selectedObjectives, onChange }: ClientObjecti
 
   return (
     <div className="space-y-6">
+      <ProTip>
+        For a more comprehensive proposal, try both uploading your objectives document 
+        and selecting from our predefined objectives. This combination helps us better 
+        understand your needs.
+      </ProTip>
+
       {/* File Upload Section */}
       <div className="bg-white p-8 rounded-xl border-2 border-dashed border-gray-200">
         <h3 className="text-lg font-semibold mb-4">Upload Your Objectives Document</h3>
