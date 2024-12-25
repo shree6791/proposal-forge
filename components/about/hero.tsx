@@ -1,73 +1,28 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
-import { fadeIn } from '@/lib/animations/variants';
+import { HeroBackground } from './hero/hero-background';
+import { HeroBadge } from './hero/hero-badge';
+import { HeroHeading } from './hero/hero-heading';
 
 export function AboutHero() {
   return (
-    <section className="relative py-20 flex items-center justify-center overflow-hidden">
-      {/* Enhanced Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white to-purple-50/90" />
-        <motion.div 
-          className="absolute top-1/4 -right-48 w-[800px] h-[800px] bg-blue-400/20 rounded-full"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 40, 0],
-            rotate: [0, 45, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          style={{ filter: 'blur(120px)' }}
-        />
-        <motion.div 
-          className="absolute -bottom-24 -left-48 w-[800px] h-[800px] bg-purple-400/20 rounded-full"
-          animate={{
-            scale: [1, 1.1, 1],
-            x: [0, -40, 0],
-            rotate: [0, -45, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          style={{ filter: 'blur(120px)' }}
-        />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.015]" />
-      </div>
+    <section className="relative min-h-[80vh] flex items-center pt-16 pb-32 overflow-hidden">
+      <HeroBackground />
 
       <div className="container mx-auto px-4">
         <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          className="max-w-4xl mx-auto text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="max-w-[1200px] mx-auto text-center"
         >
-          <motion.div 
-            variants={fadeIn}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50/80 backdrop-blur-sm rounded-full text-blue-600 text-sm font-medium mb-8 border border-blue-100/50 shadow-lg"
-          >
-            <Sparkles className="w-4 h-4 animate-pulse" />
-            Our Story
-          </motion.div>
-
-          <motion.h1 
-            variants={fadeIn}
-            className="text-5xl md:text-6xl font-bold mb-6 whitespace-nowrap"
-          >
-            Revolutionizing{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-gradient bg-[length:200%_auto]">
-              Proposal Creation
-            </span>
-          </motion.h1>
-
+          <HeroBadge />
+          <HeroHeading />
+          
           <motion.p 
-            variants={fadeIn}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
             className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto"
           >
             We're on a mission to transform how businesses create and win proposals through 
