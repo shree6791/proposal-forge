@@ -7,7 +7,7 @@ import { HeroHeading } from './hero/hero-heading';
 
 export function AboutHero() {
   return (
-    <section className="relative min-h-[80vh] flex items-center pt-16 pb-32 overflow-hidden">
+    <section className="relative min-h-[60vh] flex items-center pt-16 pb-32 overflow-hidden">
       <HeroBackground />
 
       <div className="container mx-auto px-4">
