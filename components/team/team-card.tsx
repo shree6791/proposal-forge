@@ -72,10 +72,15 @@ function SocialLink({ href, icon: Icon, gradient }: { href: string; icon: any; g
       whileTap={{ scale: 0.95 }}
       className="relative group"
     >
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-gray-600 transition-colors duration-200 bg-gray-50 group-hover:text-white relative z-10`}>
+      <div className={`
+        w-10 h-10 rounded-lg flex items-center justify-center 
+        transition-all duration-200 
+        bg-gray-50 text-gray-400
+        group-hover:bg-gray-100 group-hover:text-gray-900
+        relative z-10
+      `}>
         <Icon className="w-5 h-5" />
       </div>
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300`} />
     </motion.a>
   );
 }
