@@ -7,7 +7,6 @@ import { useSupabase } from '@/components/providers/supabase-provider';
 import { CredentialsForm } from '@/components/auth/credentials-form';
 import { AuthSocialProof } from '@/components/auth/social-proof';
 import { AnimatedBackground } from '@/components/ui/animated-background';
-import { BrandLogo } from '@/components/ui/brand/brand-logo';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -26,7 +25,7 @@ export default function AuthPage() {
         });
         
         if (error) throw error;
-        return { success: true, message: 'Success! You can now sign in with your credentials.' };
+        return { success: true, message: 'Success! Please verify your email to continue.' };
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,

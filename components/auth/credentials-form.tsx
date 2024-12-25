@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, CheckCircle } from 'lucide-react';
 import { AuthFormField } from './auth-form-field';
 import { PasswordStrength } from './password-strength';
 
@@ -19,6 +19,7 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +30,8 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
       const result = await handleSubmit(email, password);
       if (!result.success && result.message) {
         setError(result.message);
+      } else if (result.success && isSignUp) {
+        setSignupSuccess(true);
       }
     } catch (err: any) {
       setError(err.message || 'Failed to authenticate');
@@ -36,6 +39,48 @@ export function CredentialsForm({ isSignUp, handleSubmit, onToggleMode }: Creden
       setIsSubmitting(false);
     }
   };
+
+  if (signupSuccess) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center p-8 max-w-md mx-auto"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 10 }}
+          className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+        >
+          <CheckCircle className="w-8 h-8 text-green-500" />
+        </motion.div>
+
+        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          Verify Your Email
+        </h3>
+        <p className="text-gray-600 mb-6">
+          We've sent a verification link to <span className="font-semibold">{email}</span>. 
+          Please check your email and click the link to activate your account.
+        </p>
+        <p className="text-sm text-gray-500 mb-6">
+          Don't see the email? Check your spam folder.
+        </p>
+
+        <button
+          onClick={() => {
+            setSignupSuccess(false);
+            setEmail('');
+            setPassword('');
+            onToggleMode();
+          }}
+          className="text-blue-600 hover:text-blue-800 font-medium"
+        >
+          Return to Sign In
+        </button>
+      </motion.div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto">
