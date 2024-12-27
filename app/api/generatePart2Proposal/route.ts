@@ -89,9 +89,9 @@ export async function POST(request: Request) {
             - Avoid using special formatting like bold or italics; rely on clarity and logical structure.
 
             **Sections to Generate:**
-            8. **Transition – Land Safe**: Outline how the transition to your proposed solution will be managed smoothly. Include risk mitigation strategies and steps to ensure a seamless handover.
-            9. **Run Better – Driving Continuous Service Improvements**: Describe strategies for ongoing optimization of the client’s operations, focusing on efficiency, cost savings, and measurable benefits.
-            10. **Run Different – Bringing Enhancements**: Highlight innovative solutions or enhancements that differentiate your approach and provide long-term strategic advantages to the client.
+            8. **Transition - Land Safe**: Outline how the transition to your proposed solution will be managed smoothly. Include risk mitigation strategies and steps to ensure a seamless handover.
+            9. **Run Better - Driving Continuous Service Improvements**: Describe strategies for ongoing optimization of the client’s operations, focusing on efficiency, cost savings, and measurable benefits.
+            10. **Run Different -Bringing Enhancements**: Highlight innovative solutions or enhancements that differentiate your approach and provide long-term strategic advantages to the client.
             11. **Success Stories**: Share brief and impactful examples of previous successful projects. Ensure the stories align with the client’s objectives and showcase measurable results.
             12. **Why Us as Your Partner**: Summarize your unique strengths, experience, and the specific reasons why your partnership is the ideal choice for achieving the client’s goals.
 

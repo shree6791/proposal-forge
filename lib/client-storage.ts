@@ -14,13 +14,13 @@ export interface FormData {
 export const ClientStorage = {
   setFormData: (data: FormData) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem("proposalFormData", JSON.stringify(data));
+      localStorage.setItem('formData', JSON.stringify(data));
     }
   },
 
   getFormData: (): FormData | null => {
     if (typeof window !== 'undefined') {
-      const data = localStorage.getItem("proposalFormData");
+      const data = localStorage.getItem('formData');
       return data ? JSON.parse(data) : null;
     }
     return null;
@@ -28,21 +28,35 @@ export const ClientStorage = {
 
   setProposal: (proposal: string) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem("generatedProposal", proposal);
+      localStorage.setItem('proposal', proposal);
     }
   },
 
-  getProposal: () => {
+  getProposal: (): string => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem("generatedProposal") || "";
+      return localStorage.getItem('proposal') || '';
     }
-    return "";
+    return '';
+  },
+
+  setProposalPart2: (proposal: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('proposalPart2', proposal);
+    }
+  },
+
+  getProposalPart2: (): string => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('proposalPart2') || '';
+    }
+    return '';
   },
 
   clearStorage: () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem("proposalFormData");
-      localStorage.removeItem("generatedProposal");
+      localStorage.removeItem('formData');
+      localStorage.removeItem('proposal');
+      localStorage.removeItem('proposalPart2');
     }
   }
 };

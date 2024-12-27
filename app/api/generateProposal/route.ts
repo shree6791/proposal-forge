@@ -109,7 +109,7 @@ export async function POST(request: Request) {
               2. **Understanding Client Objectives**: Clearly articulate the client's goals, showing a deep understanding of their priorities.
               3. **Capabilities Overview**: Highlight your expertise and strengths, demonstrating alignment with the client's needs.
               4. **Proposed Solution**: Provide a concise and tailored solution that addresses the client's objectives in detail.
-              5. **Operating Model**: Explain the processes, frameworks, and methodologies you’ll use to deliver results effectively.
+              5. **Operating Model**: Explain the processes, frameworks, and methodologies you'll use to deliver results effectively.
               6. **Engagement Roadmap**: Outline a step-by-step plan or timeline, emphasizing milestones and actionable next steps.
               7. **Value Proposition**: Include a short section summarizing the unique value you bring to the engagement.
 
