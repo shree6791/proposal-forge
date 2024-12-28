@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FAQSearch } from '@/components/ui/faq/faq-search';
-import { FAQCategories } from '@/components/ui/faq/faq-categories';
-import { FAQList } from '@/components/ui/faq/faq-list';
-import { FAQCTA } from '@/components/ui/faq/faq-cta';
+import { FAQSearch } from '@/components/faq/faq-search';
+import { FAQCategories } from '@/components/faq/faq-categories';
+import { FAQList } from '@/components/faq/faq-list';
+import { FAQCTA } from '@/components/faq/faq-cta';
 import { faqData } from '@/lib/data/faq-data';
 import { useDebounce } from '@/lib/hooks/use-debounce';
 import { AnimatedBackground } from '@/components/ui/animated-background';
-import { FAQHeader } from '@/components/ui/faq/faq-header';
+import { FAQHeader } from '@/components/faq/faq-header';
 
 export default function FAQs() {
   const [searchQuery, setSearchQuery] = useState('');

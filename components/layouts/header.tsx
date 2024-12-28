@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AuthButtons } from '../navigation/auth-buttons';
 import { navLinks } from '../navigation/nav-links';
 import { MobileMenu } from './mobile-menu';
@@ -14,6 +16,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { user } = useSupabase();
+  const router = useRouter();
 
   // Handle scroll effects
   useEffect(() => {
@@ -53,35 +56,31 @@ export function Header() {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          {/* Enhanced Logo */}
+          {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="relative"
           >
             <BrandLogo />
-            {/* Animated gradient underline */}
-            <motion.div 
-              className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600"
-              initial={{ scaleX: 0 }}
-              whileHover={{ scaleX: 1 }}
-              transition={{ duration: 0.3 }}
-            />
           </motion.div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
-              <motion.a
+              <Link
                 key={link.href}
                 href={link.href}
                 className={`
                   relative px-4 py-2 text-gray-600 hover:text-blue-600 rounded-lg group
                   ${activeSection === link.href.slice(1) ? 'text-blue-600' : ''}
                 `}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
-                {link.label}
+                <motion.span
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {link.label}
+                </motion.span>
                 {/* Animated underline */}
                 <motion.span 
                   className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600"
@@ -90,7 +89,7 @@ export function Header() {
                   whileHover={{ scaleX: 1 }}
                   transition={{ duration: 0.2 }}
                 />
-              </motion.a>
+              </Link>
             ))}
             
             {/* Auth Buttons */}

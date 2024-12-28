@@ -1,8 +1,19 @@
+"use client";
+
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, MessageCircle } from 'lucide-react';
+import { useSupabase } from '@/components/providers/supabase-provider';
 
 export function FAQCTA() {
+  const router = useRouter();
+  const { user } = useSupabase();
+
+  const handleGetStarted = () => {
+    // Redirect to input proposal if signed in, otherwise to credentials
+    router.push(user ? '/inputproposal' : '/credentials');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -29,26 +40,24 @@ export function FAQCTA() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <Link href="/contact">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Contact Support
-            </motion.button>
-          </Link>
-          <Link href="/credentials">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center px-6 py-3 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors"
-            >
-              Get Started
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </motion.button>
-          </Link>
+          <motion.button
+            onClick={() => router.push('/contact')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
+          >
+            <MessageCircle className="w-4 h-4 mr-2" />
+            Contact Support
+          </motion.button>
+          <motion.button
+            onClick={handleGetStarted}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center px-6 py-3 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors"
+          >
+            Get Started
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </motion.button>
         </div>
       </div>
     </motion.div>
