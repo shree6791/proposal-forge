@@ -50,7 +50,7 @@ export function ResultHeader({ companyName, clientName }: ResultHeaderProps) {
           transition={{ delay: 0.3 }}
           className="text-lg text-gray-600 max-w-2xl"
         >
-          Review your AI-generated proposal below. You can generate Part 2, download the complete document, or review the cost breakdown.
+          Your AI-generated proposal is ready! Fine-tune it, download the full document, or check the cost breakdown.
         </motion.p>
       </div>
     </motion.div>

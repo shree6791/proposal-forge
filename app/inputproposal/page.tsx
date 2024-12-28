@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import { useFormValidation } from '@/hooks/use-form-validation';
 import { ClientStorage } from "@/lib/client-storage";
 import { FormSteps } from '@/components/proposal/input/form-steps';
 import { FormSection } from '@/components/proposal/input/form-section';
@@ -16,7 +15,7 @@ import { SimpleToast } from '@/components/ui/feedback/simple-toast';
 import { useFormSteps } from '@/lib/hooks/use-form-steps';
 import { BaseInput } from '@/components/ui/input/base-input';
 import { AnimatedBackground } from '@/components/ui/animated-background';
-import { generateProposalParts } from '@/lib/api/proposal-generator';
+import { useSubmitValidation } from './hooks/use-submit-validation';
 
 const initialSteps = [
   { id: 'topic', title: 'Topic', isCompleted: false, isActive: true },
@@ -29,7 +28,6 @@ export default function InputProposalPage() {
   useAuth(true);
   const router = useRouter();
   const { steps, updateStepStatus } = useFormSteps(initialSteps);
-  const { isFormComplete } = useFormValidation();
   
   const [formData, setFormData] = useState({
     companyName: "",
@@ -48,33 +46,23 @@ export default function InputProposalPage() {
     changeTickets: false
   });
 
-  const [isProcessing, setIsProcessing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  useEffect(() => {
-    updateStepStatus(formData);
-  }, [formData, updateStepStatus]);
+  const { isSubmitDisabled, areAllTicketFieldsTouched } = useSubmitValidation(formData, touchedTicketFields);
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (['incidentTickets', 'serviceRequests', 'changeTickets'].includes(field)) {
       setTouchedTicketFields(prev => ({ ...prev, [field]: true }));
     }
-  };
-
-  const areAllTicketFieldsTouched = () => {
-    return Object.values(touchedTicketFields).every(touched => touched);
-  };
-
-  const isSubmitDisabled = () => {
-    return !isFormComplete(formData) || !areAllTicketFieldsTouched() || isProcessing;
+    updateStepStatus({ ...formData, [field]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!isFormComplete(formData)) {
+    if (isSubmitDisabled()) {
       setToastMessage("Please complete all sections before generating the proposal.");
       setShowToast(true);
       return;
@@ -86,28 +74,13 @@ export default function InputProposalPage() {
       return;
     }
 
-    setIsProcessing(true);
-    try {
-      const { part1, part2 } = await generateProposalParts(formData);
-      
-      // Save form data and both proposal parts
-      ClientStorage.setFormData(formData);
-      ClientStorage.setProposal(part1);
-      ClientStorage.setProposalPart2(part2);
-
-      router.push('/result');
-    } catch (error) {
-      console.error("Error generating proposal:", error);
-      setToastMessage("Failed to generate proposal. Please try again.");
-      setShowToast(true);
-    } finally {
-      setIsProcessing(false);
-    }
+    // Save form data and navigate immediately
+    ClientStorage.setFormData(formData);
+    router.push('/result');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Hero Section */}
       <div className="relative py-24 overflow-hidden">
         <AnimatedBackground />
         
@@ -145,12 +118,10 @@ export default function InputProposalPage() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 pb-24">
         <FormSteps steps={steps} />
 
         <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto">
-          {/* Topic Selection */}
           <FormSection 
             title="Select Proposal Topic" 
             description="Choose the type of proposal you want to generate"
@@ -162,7 +133,6 @@ export default function InputProposalPage() {
             />
           </FormSection>
 
-          {/* Company Details */}
           {formData.selectedTopic && (
             <FormSection 
               title="Company Details" 
@@ -188,7 +158,6 @@ export default function InputProposalPage() {
             </FormSection>
           )}
 
-          {/* Client Objectives */}
           {formData.companyName && formData.clientName && (
             <FormSection 
               title="Client Objectives" 
@@ -202,7 +171,6 @@ export default function InputProposalPage() {
             </FormSection>
           )}
 
-          {/* Ticket Information */}
           {formData.clientObjectives.length > 0 && (
             <FormSection 
               title="Ticket Information" 
@@ -218,7 +186,6 @@ export default function InputProposalPage() {
             </FormSection>
           )}
 
-          {/* Submit Button */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -235,9 +202,7 @@ export default function InputProposalPage() {
                   : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg'}
               `}
             >
-              {isProcessing
-                ? "Processing...ProposalForge is hard at work crafting your masterpiece."
-                : "Generate Proposal"}
+              Generate Proposal
             </button>
           </motion.div>
         </form>

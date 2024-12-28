@@ -13,26 +13,16 @@ import { AnimatedBackground } from '@/components/ui/animated-background';
 export default function ResultPage() {
   const { 
     isLoading,
+    isPart1Loading,
+    isPart2Loading,
     error,
     formData,
     proposalPart1,
     proposalPart2,
-    isGeneratingPart2,
     downloadAsWord,
     updatePart1,
     updatePart2
   } = useProposal();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
-        <div className="text-center">
-          <LoadingSpinner size="large" />
-          <p className="mt-4 text-gray-600 animate-pulse">Preparing your proposal...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (error || !formData) {
     return <NoDataFallback error={error} />;
@@ -54,12 +44,12 @@ export default function ResultPage() {
           clientName={formData.clientName}
         />
 
-        {/* Proposal Content */}
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           <ProposalContent
             title="Part 1: Core Proposal Outline"
             content={proposalPart1}
             variant="primary"
+            isLoading={isPart1Loading}
             onSave={updatePart1}
           />
 
@@ -67,17 +57,18 @@ export default function ResultPage() {
             title="Part 2: Advanced Proposal Section"
             content={proposalPart2}
             variant="secondary"
-            isLoading={isGeneratingPart2}
+            isLoading={isPart2Loading}
             onSave={updatePart2}
           />
         </div>
 
-        {/* Download Section */}
         <div className="mb-8">
-          <DownloadSection onDownload={downloadAsWord} />
+          <DownloadSection 
+            onDownload={downloadAsWord}
+            isLoading={isPart1Loading || isPart2Loading}
+          />
         </div>
 
-        {/* Cost Section */}
         <div>
           <CostSection costs={costs} />
         </div>

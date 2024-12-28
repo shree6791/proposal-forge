@@ -1,8 +1,7 @@
-"use client";
-
 import { motion } from 'framer-motion';
-import { FileText, Loader2, Edit2, Save, X } from 'lucide-react';
+import { Edit2, Save, X } from 'lucide-react';
 import { useState } from 'react';
+import { ProposalSkeleton } from '@/components/ui/loading/proposal-skeleton';
 
 interface ProposalContentProps {
   title: string;
@@ -50,29 +49,27 @@ export function ProposalContent({
           <h2 className={`text-xl font-semibold bg-gradient-to-r ${gradients[variant]} bg-clip-text text-transparent`}>
             {title}
           </h2>
-          {!isEditing ? (
+          {!isLoading && !isEditing && (
             <motion.button
-              onClick={() => setIsEditing(true)}
+              onClick={() => {
+                setEditedContent(content);
+                setIsEditing(true);
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`
-                inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
-                transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200
-              `}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200"
             >
               <Edit2 className="w-4 h-4" />
               Edit
             </motion.button>
-          ) : (
+          )}
+          {isEditing && (
             <div className="flex gap-2">
               <motion.button
                 onClick={handleSave}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`
-                  inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
-                  transition-all duration-200 bg-green-500 text-white hover:bg-green-600
-                `}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-green-500 text-white hover:bg-green-600"
               >
                 <Save className="w-4 h-4" />
                 Save
@@ -81,10 +78,7 @@ export function ProposalContent({
                 onClick={handleCancel}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`
-                  inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
-                  transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200
-                `}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200"
               >
                 <X className="w-4 h-4" />
                 Cancel
@@ -95,19 +89,23 @@ export function ProposalContent({
       </div>
       
       <div className="p-6 max-h-[500px] overflow-y-auto">
-        <div className="prose prose-lg max-w-none">
-          {isEditing ? (
-            <textarea
-              value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
-              className="w-full h-[400px] p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          ) : (
-            <div className="whitespace-pre-line text-gray-700 leading-relaxed">
-              {content || 'No content available.'}
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <ProposalSkeleton />
+        ) : (
+          <div className="prose prose-lg max-w-none">
+            {isEditing ? (
+              <textarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="w-full h-[400px] p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            ) : (
+              <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+                {content || 'No content available.'}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   );
