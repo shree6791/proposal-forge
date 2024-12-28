@@ -16,6 +16,7 @@ import { SimpleToast } from '@/components/ui/feedback/simple-toast';
 import { useFormSteps } from '@/lib/hooks/use-form-steps';
 import { BaseInput } from '@/components/ui/input/base-input';
 import { AnimatedBackground } from '@/components/ui/animated-background';
+import { generateProposalParts } from '@/lib/api/proposal-generator';
 
 const initialSteps = [
   { id: 'topic', title: 'Topic', isCompleted: false, isActive: true },
@@ -87,18 +88,12 @@ export default function InputProposalPage() {
 
     setIsProcessing(true);
     try {
-      const response = await fetch("/api/generateProposal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Failed to generate proposal");
-
-      const { proposal } = await response.json();
+      const { part1, part2 } = await generateProposalParts(formData);
       
+      // Save form data and both proposal parts
       ClientStorage.setFormData(formData);
-      ClientStorage.setProposal(proposal);
+      ClientStorage.setProposal(part1);
+      ClientStorage.setProposalPart2(part2);
 
       router.push('/result');
     } catch (error) {

@@ -17,10 +17,10 @@ export default function ResultPage() {
     formData,
     proposalPart1,
     proposalPart2,
-    buttonText,
     isGeneratingPart2,
-    generatePart2,
-    downloadAsWord
+    downloadAsWord,
+    updatePart1,
+    updatePart2
   } = useProposal();
 
   if (isLoading) {
@@ -59,27 +59,25 @@ export default function ResultPage() {
           <ProposalContent
             title="Part 1: Core Proposal Outline"
             content={proposalPart1}
-            buttonText="Part 1 of Proposal"
             variant="primary"
+            onSave={updatePart1}
           />
 
           <ProposalContent
             title="Part 2: Advanced Proposal Section"
             content={proposalPart2}
-            buttonText={buttonText}
-            onButtonClick={generatePart2}
-            isDisabled={isGeneratingPart2}
             variant="secondary"
             isLoading={isGeneratingPart2}
+            onSave={updatePart2}
           />
         </div>
 
-        {/* Download Section - Full Width */}
+        {/* Download Section */}
         <div className="mb-8">
           <DownloadSection onDownload={downloadAsWord} />
         </div>
 
-        {/* Cost Section - Full Width */}
+        {/* Cost Section */}
         <div>
           <CostSection costs={costs} />
         </div>

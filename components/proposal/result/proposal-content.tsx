@@ -1,30 +1,42 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { FileText, Loader2 } from 'lucide-react';
+import { FileText, Loader2, Edit2, Save, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProposalContentProps {
   title: string;
   content: string;
-  buttonText: string;
-  onButtonClick?: () => void;
-  isDisabled?: boolean;
   variant?: 'primary' | 'secondary';
   isLoading?: boolean;
+  onSave?: (content: string) => void;
 }
 
 export function ProposalContent({ 
   title, 
   content, 
-  buttonText, 
-  onButtonClick, 
-  isDisabled = false,
   variant = 'primary',
-  isLoading = false
+  isLoading = false,
+  onSave
 }: ProposalContentProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(content);
+
   const gradients = {
     primary: 'from-blue-600 to-purple-600',
     secondary: 'from-purple-600 to-pink-600'
+  };
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(editedContent);
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditedContent(content);
+    setIsEditing(false);
   };
 
   return (
@@ -38,41 +50,63 @@ export function ProposalContent({
           <h2 className={`text-xl font-semibold bg-gradient-to-r ${gradients[variant]} bg-clip-text text-transparent`}>
             {title}
           </h2>
-          {onButtonClick && (
+          {!isEditing ? (
             <motion.button
-              onClick={onButtonClick}
-              disabled={isDisabled}
-              whileHover={{ scale: isDisabled ? 1 : 1.02 }}
-              whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+              onClick={() => setIsEditing(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               className={`
                 inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
-                transition-all duration-200
-                ${isDisabled 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : `bg-gradient-to-r ${gradients[variant]} text-white hover:shadow-lg`}
+                transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200
               `}
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <FileText className="w-4 h-4" />
-                  {buttonText}
-                </>
-              )}
+              <Edit2 className="w-4 h-4" />
+              Edit
             </motion.button>
+          ) : (
+            <div className="flex gap-2">
+              <motion.button
+                onClick={handleSave}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`
+                  inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
+                  transition-all duration-200 bg-green-500 text-white hover:bg-green-600
+                `}
+              >
+                <Save className="w-4 h-4" />
+                Save
+              </motion.button>
+              <motion.button
+                onClick={handleCancel}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`
+                  inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium
+                  transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200
+                `}
+              >
+                <X className="w-4 h-4" />
+                Cancel
+              </motion.button>
+            </div>
           )}
         </div>
       </div>
       
       <div className="p-6 max-h-[500px] overflow-y-auto">
         <div className="prose prose-lg max-w-none">
-          <div className="whitespace-pre-line text-gray-700 leading-relaxed">
-            {content || 'Click the button above to generate this part of the proposal.'}
-          </div>
+          {isEditing ? (
+            <textarea
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              className="w-full h-[400px] p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          ) : (
+            <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+              {content || 'No content available.'}
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
