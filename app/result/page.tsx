@@ -20,7 +20,13 @@ export default function ResultPage() {
     buttonText,
     isGeneratingPart2,
     generatePart2,
-    downloadAsWord
+    downloadAsWord,
+    isEditing,
+    editedContent,
+    startEditing,
+    cancelEditing,
+    saveContent,
+    handleContentChange
   } = useProposal();
 
   if (isLoading) {
@@ -61,6 +67,12 @@ export default function ResultPage() {
             content={proposalPart1}
             buttonText="Part 1 of Proposal"
             variant="primary"
+            isEditing={isEditing.part1}
+            editedContent={editedContent.part1}
+            onEdit={() => startEditing('part1')}
+            onSave={() => saveContent('part1')}
+            onCancel={() => cancelEditing('part1')}
+            onContentChange={(content) => handleContentChange('part1', content)}
           />
 
           <ProposalContent
@@ -71,6 +83,12 @@ export default function ResultPage() {
             isDisabled={isGeneratingPart2}
             variant="secondary"
             isLoading={isGeneratingPart2}
+            isEditing={isEditing.part2}
+            editedContent={editedContent.part2}
+            onEdit={() => startEditing('part2')}
+            onSave={() => saveContent('part2')}
+            onCancel={() => cancelEditing('part2')}
+            onContentChange={(content) => handleContentChange('part2', content)}
           />
         </div>
 

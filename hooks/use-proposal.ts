@@ -10,6 +10,39 @@ export function useProposal() {
   const [isGeneratingPart2, setIsGeneratingPart2] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState({ part1: false, part2: false });
+  const [editedContent, setEditedContent] = useState({ part1: "", part2: "" });
+
+  // Save edited content
+  const saveContent = (part: 'part1' | 'part2') => {
+    if (part === 'part1') {
+      setProposalPart1(editedContent.part1);
+      ClientStorage.setProposal(editedContent.part1);
+    } else {
+      setProposalPart2(editedContent.part2);
+      ClientStorage.setProposalPart2(editedContent.part2);
+    }
+    setIsEditing({ ...isEditing, [part]: false });
+  };
+
+  // Start editing
+  const startEditing = (part: 'part1' | 'part2') => {
+    setEditedContent({
+      ...editedContent,
+      [part]: part === 'part1' ? proposalPart1 : proposalPart2
+    });
+    setIsEditing({ ...isEditing, [part]: true });
+  };
+
+  // Cancel editing
+  const cancelEditing = (part: 'part1' | 'part2') => {
+    setIsEditing({ ...isEditing, [part]: false });
+  };
+
+  // Handle content change
+  const handleContentChange = (part: 'part1' | 'part2', content: string) => {
+    setEditedContent({ ...editedContent, [part]: content });
+  };
 
   // Function to generate Part 2
   const generatePart2 = async (isAuto = false) => {
@@ -140,6 +173,12 @@ export function useProposal() {
     buttonText,
     isGeneratingPart2,
     generatePart2: () => generatePart2(false),
-    downloadAsWord
+    downloadAsWord,
+    isEditing,
+    editedContent,
+    startEditing,
+    cancelEditing,
+    saveContent,
+    handleContentChange
   };
 }
