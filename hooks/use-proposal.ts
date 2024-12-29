@@ -13,8 +13,8 @@ export function useProposal() {
   const [proposalPart2, setProposalPart2] = useState("");
   const [formData, setFormData] = useState<FormData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
-  const MAX_RETRIES = 3;
+  // const [retryCount, setRetryCount] = useState(0);
+  // const MAX_RETRIES = 1;
 
   const { downloadAsWord } = useProposalDownload();
 
@@ -33,18 +33,18 @@ export function useProposal() {
       ClientStorage.setProposal(part1);
       ClientStorage.setProposalPart2(part2);
 
-      setRetryCount(0); // Reset retry count on success
+      // setRetryCount(0); // Reset retry count on success
     } catch (err) {
       const apiError = handleAPIError(err);
       console.error('Error generating proposal:', apiError);
 
       // Retry logic
-      if (retryCount < MAX_RETRIES) {
-        setRetryCount(prev => prev + 1);
-        await generateProposal(data); // Retry
-      } else {
-        setError(apiError.message);
-      }
+      // if (retryCount < MAX_RETRIES) {
+      //   setRetryCount(prev => prev + 1);
+      //   await generateProposal(data); // Retry
+      // } else {
+      //   setError(apiError.message);
+      // }
     } finally {
       setIsPart1Loading(false);
       setIsPart2Loading(false);
