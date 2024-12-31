@@ -28,7 +28,7 @@ export function LoadingHeader() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ 
-              delay: index * 3,
+              delay: index * 1.5,
               duration: 0.5
             }}
             className="flex items-center justify-center gap-2 text-gray-600"
