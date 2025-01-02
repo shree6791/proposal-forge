@@ -6,13 +6,11 @@ import { ProposalContent } from '@/components/proposal/result/proposal-content';
 import { DownloadSection } from '@/components/proposal/result/download-section';
 import { CostSection } from '@/components/proposal/result/cost-section';
 import { NoDataFallback } from '@/components/proposal/result/no-data-fallback';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { calculateCosts } from '@/lib/cost-calculator';
 import { AnimatedBackground } from '@/components/ui/animated-background';
 
 export default function ResultPage() {
   const { 
-    isLoading,
     isPart1Loading,
     isPart2Loading,
     error,
@@ -46,7 +44,7 @@ export default function ResultPage() {
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           <ProposalContent
-            title="Part 1: Core Proposal Outline"
+            title="The core solution and operating model"
             content={proposalPart1}
             variant="primary"
             isLoading={isPart1Loading}
@@ -54,7 +52,7 @@ export default function ResultPage() {
           />
 
           <ProposalContent
-            title="Part 2: Advanced Proposal Section"
+            title="Detailed execution approach and value adds"
             content={proposalPart2}
             variant="secondary"
             isLoading={isPart2Loading}
