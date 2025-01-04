@@ -80,9 +80,10 @@ export async function POST(request: Request) {
       .replace(/\{\{ Client Name \}\}/g, clientName)
       .replace(/\{\{ Client Objectives \}\}/g, clientObjectives.join(", "));
 
+    // Define model configs
     const modelConfig: Record<string, ModelConfig> = {
-      "gpt-3.5-turbo": { maxTokens: 4096, temperature: 0.7 },
-      "gpt-4o-mini": { maxTokens: 2500, temperature: 0.7 },
+      "gpt-3.5-turbo": { maxTokens: 4000, temperature: 0.8 },
+      "gpt-4o-mini": { maxTokens: 4000, temperature: 0.7 },
     };
 
     // Call the OpenAI API
@@ -96,24 +97,22 @@ export async function POST(request: Request) {
           {
             role: "system",
             content: `
-              You are an expert in crafting professional, client-focused proposals. Create a proposal based on the input provided.
-
-              **Guidelines:**
-              - Use exactly 7 numbered sections as listed below. Do not add extra sections.
-              - Use alphabetical bullets (a), b), c.), etc.) for subpoints or lists within the sections.
-              - Ensure the tone is professional, engaging, and focused on addressing the client's needs.
-              - Avoid unnecessary formatting like bold or italics, but prioritize logical flow and readability.
-
-              **Proposal Structure:**
-              1. **Thank You Note**: Begin with a warm and professional thank-you message, acknowledging the opportunity to collaborate.
-              2. **Understanding Client Objectives**: Clearly articulate the client's goals, showing a deep understanding of their priorities.
-              3. **Capabilities Overview**: Highlight your expertise and strengths, demonstrating alignment with the client's needs.
-              4. **Proposed Solution**: Provide a concise and tailored solution that addresses the client's objectives in detail.
-              5. **Operating Model**: Explain the processes, frameworks, and methodologies you'll use to deliver results effectively.
-              6. **Engagement Roadmap**: Outline a step-by-step plan or timeline, emphasizing milestones and actionable next steps.
-              7. **Value Proposition**: Include a short section summarizing the unique value you bring to the engagement.
-
-              Do not include any additional sections. Follow the exact structure above.
+            You are an accomplished IT services proposal writer with Shipley Industry-Leading Expertise. 
+            Generate a top-quality, business-savvy proposal. Include ONLY the following sections in numbered format:
+              1. Thank You 
+              2. Understanding Client Objectives
+              3. Capabilities Overview
+              4. Proposed Solution
+              5. Operating Model
+              6. Engagement Roadmap 
+ DO NOT INCLUDE any content AFTER SECTION "ENGAGEMENT ROADMAP". In engagement roadmap, do add content on land safe, run better and run different. 
+ In section 2. Understanding Client Objectives, state the objectives given as input. Also mention why application maitenance services are important for clients operating that clients business segement (retail or banking)  
+ • Use numbered sections (1., 2., 3., etc.) for main sections
+            Each section should be descriptive 
+            • Only if required, Use alphabetical bullets (a), b), c), etc. for subpoints/lists
+            • Do not use bold, italics, or special formatting for subsections or bullet points
+            Tailor the language to highlight how our solutions address the client's objectives.
+            Keep it concise, clear, and directly relevant to the client's needs.
             `,
           },
           {
